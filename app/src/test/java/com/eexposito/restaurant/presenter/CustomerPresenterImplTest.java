@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
@@ -19,20 +20,20 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.android.plugins.RxAndroidPlugins;
+import io.reactivex.schedulers.Schedulers;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
-import rx.Observable;
-import rx.schedulers.Schedulers;
 
-import static com.eexposito.reservations._support.fixtures.FixtureModels.fixtureCustomerList;
-import static com.eexposito.reservations._support.fixtures.FixtureModels.mockRealmResults;
+import static com.eexposito.restaurant._support.fixtures.FixtureModels.fixtureCustomerList;
+import static com.eexposito.restaurant._support.fixtures.FixtureModels.mockRealmResults;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -42,7 +43,7 @@ public class CustomerPresenterImplTest extends BaseTest {
     @Mock
     RealmService mService;
 
-    @Mock
+    @Spy
     RxSchedulerConfiguration mSchedulersConfiguration;
 
     @Mock
@@ -54,21 +55,29 @@ public class CustomerPresenterImplTest extends BaseTest {
     @InjectMocks
     private CustomerPresenterImpl mPresenter;
 
+    @BeforeClass
+    public static void setupClass() {
+
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(
+                __ -> Schedulers.trampoline());
+    }
+
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
 
         // To make it sync
-        when(mSchedulersConfiguration.getMainThread())
-                .thenReturn(Schedulers.immediate());
-        when(mSchedulersConfiguration.getComputationThread())
-                .thenReturn(Schedulers.immediate());
+//        when(mSchedulersConfiguration.getMainThread())
+//                .thenReturn(Schedulers.immediate());
+//        when(mSchedulersConfiguration.getComputationThread())
+//                .thenReturn(mSchedulersConfiguration.getMainThread());
     }
 
     @After
     public void tearDown() {
 
+        RxAndroidPlugins.reset();
         mPresenter = null;
     }
 
@@ -168,8 +177,7 @@ public class CustomerPresenterImplTest extends BaseTest {
 
         mPresenter.mViewWeakReference = new WeakReference<>(mView);
 
-        // Mocking data source to return a list of results
-        List<Customer> results = fixtureCustomerList();
+        // Mocking data source to return an exception
         when(mDataSource.getCustomers(anyBoolean())).
                 thenReturn(Observable.error(new RuntimeException()));
 

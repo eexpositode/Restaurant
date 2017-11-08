@@ -5,7 +5,7 @@ import com.eexposito.restaurant._support.BaseTest;
 
 import org.junit.Test;
 
-import static com.eexposito.reservations._support.fixtures.FixtureModels.fixtureCustomer;
+import static com.eexposito.restaurant._support.fixtures.FixtureModels.fixtureCustomer;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;

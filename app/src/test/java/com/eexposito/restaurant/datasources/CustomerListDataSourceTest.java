@@ -17,13 +17,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 import io.realm.RealmResults;
-import rx.Observable;
-import rx.observers.TestSubscriber;
 
-import static com.eexposito.reservations._support.fixtures.FixtureModels.fixtureCustomer;
-import static com.eexposito.reservations._support.fixtures.FixtureModels.fixtureCustomerList;
-import static com.eexposito.reservations._support.fixtures.FixtureModels.mockRealmResults;
+import static com.eexposito.restaurant._support.fixtures.FixtureModels.fixtureCustomer;
+import static com.eexposito.restaurant._support.fixtures.FixtureModels.fixtureCustomerList;
+import static com.eexposito.restaurant._support.fixtures.FixtureModels.mockRealmResults;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -76,13 +76,13 @@ public class CustomerListDataSourceTest extends BaseTest {
         Observable<List<Customer>> observable = mDataSource.getCustomers(true);
         List<Customer> customers = Collections.singletonList(fixtureCustomer(1, "John", "Doe"));
 
-        TestSubscriber<List<Customer>> subscriber = new TestSubscriber<>();
+        TestObserver<List<Customer>> subscriber = new TestObserver<>();
         observable.subscribe(subscriber);
 
-        subscriber.assertCompleted();
+        subscriber.assertComplete();
         subscriber.assertNoErrors();
         subscriber.assertValueCount(1);
-        assertThat(subscriber.getOnNextEvents(), hasItem(customers));
+        assertThat(subscriber.values(), hasItem(customers));
     }
 
     @Test
@@ -91,13 +91,13 @@ public class CustomerListDataSourceTest extends BaseTest {
         Observable<List<Customer>> observable = mDataSource.getCustomers(true);
         List<Customer> customers = mTestCustomers;
 
-        TestSubscriber<List<Customer>> subscriber = new TestSubscriber<>();
+        TestObserver<List<Customer>> subscriber = new TestObserver<>();
         observable.subscribe(subscriber);
 
-        subscriber.assertCompleted();
+        subscriber.assertComplete();
         subscriber.assertNoErrors();
         subscriber.assertValueCount(1);
-        assertThat(subscriber.getOnNextEvents(), hasItem(customers));
+        assertThat(subscriber.values(), hasItem(customers));
     }
 
     @Test
@@ -111,13 +111,13 @@ public class CustomerListDataSourceTest extends BaseTest {
 
         Observable<List<Customer>> observable = mDataSource.getCustomers(false);
 
-        TestSubscriber<List<Customer>> subscriber = new TestSubscriber<>();
+        TestObserver<List<Customer>> subscriber = new TestObserver<>();
         observable.subscribe(subscriber);
 
-        subscriber.assertCompleted();
+        subscriber.assertComplete();
         subscriber.assertNoErrors();
         subscriber.assertValueCount(1);
-        assertThat(subscriber.getOnNextEvents(), hasItem(results));
+        assertThat(subscriber.values(), hasItem(results));
     }
 
     //////////////////////////////////////////////////////////////
@@ -129,13 +129,13 @@ public class CustomerListDataSourceTest extends BaseTest {
         Observable<List<Customer>> observable = mDataSource.getDefaultResponse();
         List<Customer> customers = Collections.singletonList(fixtureCustomer(1, "John", "Doe"));
 
-        TestSubscriber<List<Customer>> subscriber = new TestSubscriber<>();
+        TestObserver<List<Customer>> subscriber = new TestObserver<>();
         observable.subscribe(subscriber);
 
-        subscriber.assertCompleted();
+        subscriber.assertComplete();
         subscriber.assertNoErrors();
         subscriber.assertValueCount(1);
-        assertThat(subscriber.getOnNextEvents(), hasItem(customers));
+        assertThat(subscriber.values(), hasItem(customers));
     }
 
     //////////////////////////////////////////////////////////////
@@ -154,11 +154,11 @@ public class CustomerListDataSourceTest extends BaseTest {
                 .when(mModelManager).saveOrUpdateModelList(anyList());
         Observable<List<Customer>> observable = mDataSource.getCustomerListFromRetrofit();
 
-        TestSubscriber<List<Customer>> subscriber = new TestSubscriber<>();
+        TestObserver<List<Customer>> subscriber = new TestObserver<>();
         observable.subscribe(subscriber);
 
         subscriber.assertError(RuntimeException.class);
-        subscriber.assertNotCompleted();
+        subscriber.assertNotComplete();
     }
 
     @Test
@@ -168,13 +168,13 @@ public class CustomerListDataSourceTest extends BaseTest {
 
         List<Customer> customers = mTestCustomers;
 
-        TestSubscriber<List<Customer>> subscriber = new TestSubscriber<>();
+        TestObserver<List<Customer>> subscriber = new TestObserver<>();
         observable.subscribe(subscriber);
 
-        subscriber.assertCompleted();
+        subscriber.assertComplete();
         subscriber.assertNoErrors();
         subscriber.assertValueCount(1);
-        assertThat(subscriber.getOnNextEvents(), hasItem(customers));
+        assertThat(subscriber.values(), hasItem(customers));
     }
 
     //////////////////////////////////////////////////////////////
@@ -185,10 +185,10 @@ public class CustomerListDataSourceTest extends BaseTest {
 
         Observable<List<Customer>> observable = mDataSource.getCustomersFromRealm(true);
 
-        TestSubscriber<List<Customer>> subscriber = new TestSubscriber<>();
+        TestObserver<List<Customer>> subscriber = new TestObserver<>();
         observable.subscribe(subscriber);
 
-        subscriber.assertCompleted();
+        subscriber.assertComplete();
         subscriber.assertNoErrors();
         subscriber.assertValueCount(0);
     }
@@ -201,11 +201,11 @@ public class CustomerListDataSourceTest extends BaseTest {
 
         Observable<List<Customer>> observable = mDataSource.getCustomersFromRealm(false);
 
-        TestSubscriber<List<Customer>> subscriber = new TestSubscriber<>();
+        TestObserver<List<Customer>> subscriber = new TestObserver<>();
         observable.subscribe(subscriber);
 
         subscriber.assertError(RuntimeException.class);
-        subscriber.assertNotCompleted();
+        subscriber.assertNotComplete();
     }
 
     @Test
@@ -217,16 +217,12 @@ public class CustomerListDataSourceTest extends BaseTest {
 
         Observable<List<Customer>> observable = mDataSource.getCustomersFromRealm(false);
 
-        TestSubscriber<List<Customer>> subscriber = new TestSubscriber<>();
+        TestObserver<List<Customer>> subscriber = new TestObserver<>();
         observable.subscribe(subscriber);
 
-        subscriber.assertCompleted();
+        subscriber.assertComplete();
         subscriber.assertNoErrors();
         subscriber.assertValueCount(1);
-        assertThat(subscriber.getOnNextEvents(), hasItem(results));
+        assertThat(subscriber.values(), hasItem(results));
     }
-
-    /////////////////////////////////////////////////////////////////
-    // Fixtures
-    /////////////////////////////////////////////////////////////////
 }
