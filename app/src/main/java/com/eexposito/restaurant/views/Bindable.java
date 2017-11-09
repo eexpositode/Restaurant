@@ -13,9 +13,9 @@ public interface Bindable<M extends RealmModel> {
     void onFetchDataCompleted();
 
     void onFetchDataSuccess(List<M> modelList);
-
-    // TODO: 1/11/17 We need this?
-    void onResponseFail(ResponseBody responseBody);
+//
+//    // TODO: 1/11/17 We need this?
+//    void onResponseFail(ResponseBody responseBody);
 
     void onFetchDataError(final Throwable e);
 
