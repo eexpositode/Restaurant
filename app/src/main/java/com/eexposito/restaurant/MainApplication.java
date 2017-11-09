@@ -9,17 +9,17 @@ import com.eexposito.restaurant.realm.RealmDefinitions;
 
 import javax.inject.Inject;
 
+import org.androidannotations.annotations.EApplication;
+
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import io.realm.Realm;
 
-// TODO: 4/11/17 Use Android Annotations @EApplication?
+@EApplication
 public class MainApplication extends Application implements HasActivityInjector {
 
     @Inject
     DispatchingAndroidInjector<Activity> activityDispatchingAndroidInjector;
-
-//    protected ApplicationComponent mAppComponent;
 
     public MainApplication() {
 

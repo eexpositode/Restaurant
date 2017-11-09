@@ -8,8 +8,11 @@ import com.eexposito.restaurant.presenter.CustomerPresenterImpl;
 
 import javax.inject.Inject;
 
+import org.androidannotations.annotations.EActivity;
+
 import dagger.android.AndroidInjection;
 
+@EActivity(R.layout.activity_restaurant)
 public class RestaurantActivity extends AppCompatActivity {
 
     @Inject
@@ -20,7 +23,6 @@ public class RestaurantActivity extends AppCompatActivity {
 
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurant);
     }
 
     public void showCustomerList() {

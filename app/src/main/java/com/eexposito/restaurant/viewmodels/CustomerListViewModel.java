@@ -1,14 +1,12 @@
-package com.eexposito.restaurant._support.fixtures;
+package com.eexposito.restaurant.viewmodels;
 
 import com.eexposito.restaurant.realm.models.Customer;
 import com.eexposito.restaurant.views.Bindable;
 
 import java.util.List;
 
-import okhttp3.ResponseBody;
 
-
-public class TestCustomerView implements Bindable<Customer> {
+public class CustomerListViewModel implements Bindable<Customer> {
 
     @Override
     public void onFetchDataStarted() {
