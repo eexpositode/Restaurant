@@ -28,7 +28,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
-@RunWith(AndroidJUnit4.class)
 public class ModelManagerBaseTest extends RealmBaseTest {
 
     private TestModelManager mModelManager;

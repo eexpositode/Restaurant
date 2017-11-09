@@ -11,7 +11,7 @@ import org.robolectric.annotation.Config;
 
 @RunWith(CustomTestRunner.class)
 @Config(manifest= "app/src/main/AndroidManifest.xml")
-@Ignore
+@Ignore("No testing class")
 public class BaseTest {
 
     protected TestApplicationComponent mTestApplicationComponent;
