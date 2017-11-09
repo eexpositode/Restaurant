@@ -21,8 +21,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.plugins.RxAndroidPlugins;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
@@ -43,7 +43,7 @@ public class CustomerPresenterImplTest extends BaseTest {
     @Mock
     RealmService mService;
 
-    @Spy
+    @Mock
     RxSchedulerConfiguration mSchedulersConfiguration;
 
     @Mock
@@ -55,29 +55,21 @@ public class CustomerPresenterImplTest extends BaseTest {
     @InjectMocks
     private CustomerPresenterImpl mPresenter;
 
-    @BeforeClass
-    public static void setupClass() {
-
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler(
-                __ -> Schedulers.trampoline());
-    }
-
     @Before
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
 
         // To make it sync
-//        when(mSchedulersConfiguration.getMainThread())
-//                .thenReturn(Schedulers.immediate());
-//        when(mSchedulersConfiguration.getComputationThread())
-//                .thenReturn(mSchedulersConfiguration.getMainThread());
+        when(mSchedulersConfiguration.getComputationThread())
+                .then(invocation -> AndroidSchedulers.mainThread());
+        when(mSchedulersConfiguration.getMainThread())
+                .then(invocation -> AndroidSchedulers.mainThread());
     }
 
     @After
     public void tearDown() {
 
-        RxAndroidPlugins.reset();
         mPresenter = null;
     }
 
