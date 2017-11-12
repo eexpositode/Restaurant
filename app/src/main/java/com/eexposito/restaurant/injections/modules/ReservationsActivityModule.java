@@ -13,18 +13,24 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class RestaurantActivityModule {
+public class ReservationsActivityModule {
 
     @Provides
-    public TableDataSource provideTableDataSource(ModelManager modelManager,
-                                                  ReservationsServiceApi api) {
+    public CustomerDataSource provideCustomerDataSource(ModelManager modelManager,
+                                                        ReservationsServiceApi api) {
 
-        return new TableDataSource(modelManager, api);
+        return new CustomerDataSource(modelManager, api);
     }
 
+    /**
+     * Presenter for CustomerList
+     *
+     * @param dataSource
+     * @return
+     */
     @Provides
-    public TablePresenter provideTablePresenter(TableDataSource dataSource) {
+    public CustomerPresenter provideCustomerPresenter(CustomerDataSource dataSource) {
 
-        return new TablePresenterImpl(dataSource);
+        return new CustomerPresenterImpl(dataSource);
     }
 }

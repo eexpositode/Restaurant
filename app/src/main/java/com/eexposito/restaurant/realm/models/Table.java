@@ -14,12 +14,19 @@ public class Table extends RealmObject implements Model {
     @Required
     private String mID = UUID.randomUUID().toString();
 
+    private int mOrder;
+
     private Reservation mReservation;
 
     public Table() {
+
         super();
     }
 
+    public Table(final int order) {
+
+        mOrder = order;
+    }
     ////////////////////////////////////////////////////////////////////
     // Getters and Setters
     ////////////////////////////////////////////////////////////////////
@@ -34,6 +41,12 @@ public class Table extends RealmObject implements Model {
 
         return mReservation;
     }
+
+    public int getOrder() {
+
+        return mOrder;
+    }
+
     ////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////
     @Override

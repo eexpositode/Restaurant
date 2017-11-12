@@ -1,14 +1,18 @@
 package com.eexposito.restaurant.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.Toast;
 
 import com.eexposito.restaurant.R;
+import com.eexposito.restaurant.activities.ReservationsActivity_;
 import com.eexposito.restaurant.adapters.TableGridAdapter;
 import com.eexposito.restaurant.presenter.DataCallback;
 import com.eexposito.restaurant.presenter.TablePresenter;
@@ -16,6 +20,7 @@ import com.eexposito.restaurant.realm.models.Table;
 
 import javax.inject.Inject;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
@@ -24,12 +29,15 @@ import io.realm.RealmResults;
 @EViewGroup(R.layout.view_table_grid)
 public class TableGridView extends FrameLayout implements DataCallback<Table> {
 
+    public static final String TABLE_ID = "TABLE_ID";
+
     @Inject
     TablePresenter mPresenter;
 
     @ViewById(R.id.table_grid_grid_view)
     GridView mTableGridView;
 
+    private RealmResults<Table> mCurrentModelList;
     private TableGridAdapter mTableGridAdapter;
 
     public TableGridView(@NonNull final Context context) {
@@ -53,6 +61,23 @@ public class TableGridView extends FrameLayout implements DataCallback<Table> {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    @AfterViews
+    public void init() {
+
+        mTableGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+
+                Intent intent = new Intent(getContext(), ReservationsActivity_.class);
+                //                mTableGridAdapter.getItem(position).getID()
+                String tableId = mCurrentModelList.get(position).getID();
+                intent.putExtra(TABLE_ID, tableId);
+                getContext().startActivity(intent);
+            }
+        });
+    }
+
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
 
@@ -62,6 +87,7 @@ public class TableGridView extends FrameLayout implements DataCallback<Table> {
         mPresenter.bind(this);
     }
 
+
     @Override
     protected void onDetachedFromWindow() {
 
@@ -69,7 +95,6 @@ public class TableGridView extends FrameLayout implements DataCallback<Table> {
         mPresenter = null;
         super.onDetachedFromWindow();
     }
-
 
     @Override
     public void onFetchDataStarted() {
@@ -88,8 +113,9 @@ public class TableGridView extends FrameLayout implements DataCallback<Table> {
 
         Toast.makeText(getContext(), "List found with size " + modelList.size(), Toast.LENGTH_LONG).show();
 
+        mCurrentModelList = modelList;
         if (mTableGridAdapter == null) {
-            mTableGridAdapter = new TableGridAdapter(modelList);
+            mTableGridAdapter = new TableGridAdapter(mCurrentModelList);
             mTableGridView.setAdapter(mTableGridAdapter);
         } else {
             mTableGridAdapter.notifyDataSetChanged();

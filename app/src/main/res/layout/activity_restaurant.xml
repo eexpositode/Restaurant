@@ -6,23 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".activities.RestaurantActivity_">
 
-    <LinearLayout
+    <com.eexposito.restaurant.views.TableGridView_
+        android:id="@+id/restaurant_table_grid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="4">
-
-        <com.eexposito.restaurant.views.CustomerListView_
-            android:id="@+id/restaurant_customer_list"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"/>
-
-        <com.eexposito.restaurant.views.TableGridView_
-            android:id="@+id/restaurant_table_grid"
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

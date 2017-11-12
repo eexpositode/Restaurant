@@ -21,13 +21,7 @@ import dagger.android.AndroidInjection;
 public class RestaurantActivity extends AppCompatActivity {
 
     @Inject
-    CustomerPresenter mCustomerPresenter;
-
-    @Inject
     TablePresenter mTablePresenter;
-
-    @ViewById(R.id.restaurant_customer_list)
-    CustomerListView mCustomerListView;
 
     @ViewById(R.id.restaurant_table_grid)
     TableGridView mTableGridView;
@@ -42,7 +36,6 @@ public class RestaurantActivity extends AppCompatActivity {
     @AfterViews
     public void afterViews() {
 
-        mCustomerListView.bind(mCustomerPresenter);
         mTableGridView.bind(mTablePresenter);
     }
 
