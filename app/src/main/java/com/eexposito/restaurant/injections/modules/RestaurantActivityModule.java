@@ -1,11 +1,12 @@
 package com.eexposito.restaurant.injections.modules;
 
 import com.eexposito.restaurant.datasources.CustomerListDataSource;
+import com.eexposito.restaurant.presenter.CustomerPresenter;
 import com.eexposito.restaurant.presenter.CustomerPresenterImpl;
+import com.eexposito.restaurant.presenter.EasyCustomerPresenterImpl;
+import com.eexposito.restaurant.realm.ModelManager;
 import com.eexposito.restaurant.realm.RealmService;
 import com.eexposito.restaurant.retrofit.ReservationsServiceApi;
-import com.eexposito.restaurant.realm.ModelManager;
-import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
 
 import dagger.Module;
 import dagger.Provides;
@@ -15,7 +16,7 @@ public class RestaurantActivityModule {
 
     @Provides
     public CustomerListDataSource provideCustomerListDataSource(ModelManager modelManager,
-                                                         ReservationsServiceApi api) {
+                                                                ReservationsServiceApi api) {
 
         return new CustomerListDataSource(modelManager, api);
     }
@@ -23,15 +24,19 @@ public class RestaurantActivityModule {
     /**
      * Presenter for CustomerList
      *
-     * @param rxSchedulerConfiguration
      * @param dataSource
      * @return
      */
-    @Provides
-    public CustomerPresenterImpl provideCustomerListPresenter(RealmService service,
-                                                              RxSchedulerConfiguration rxSchedulerConfiguration,
-                                                              CustomerListDataSource dataSource) {
+//    @Provides
+//    public CustomerPresenter provideCustomerListPresenter(RealmService service,
+//                                                          CustomerListDataSource dataSource) {
+//
+//        return new CustomerPresenterImpl(service, dataSource);
+//    }
 
-        return new CustomerPresenterImpl(service, rxSchedulerConfiguration, dataSource);
+    @Provides
+    public CustomerPresenter provideCustomerListPresenter(ReservationsServiceApi api) {
+
+        return new EasyCustomerPresenterImpl(api);
     }
 }

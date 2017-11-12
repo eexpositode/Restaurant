@@ -18,14 +18,19 @@ public class RealmService {
         mRealm = realm;
     }
 
+    public Realm getRealm() {
+
+        return mRealm;
+    }
+
     public void closeRealm() {
 
         mRealm.removeAllChangeListeners();
         mRealm.close();
     }
-
-    public <M extends RealmObject> Observable<RealmResults<M>> getAllModelsAsync(Class<M> modelClass) {
-
-        return Observable.just(mRealm.where(modelClass).findAllAsync());
-    }
+//
+//    public <M extends RealmObject> Observable<RealmResults<M>> getAllModelsAsync(Class<M> modelClass) {
+//
+//        return Observable.just(mRealm.where(modelClass).findAllAsync());
+//    }
 }

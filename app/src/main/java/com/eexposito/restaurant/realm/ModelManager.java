@@ -29,7 +29,7 @@ public class ModelManager {
     public <M extends RealmObject> void saveOrUpdateModelList(@NonNull List<M> modelList) {
 
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realm1 -> realm1.insertOrUpdate(modelList));
+        saveOrUpdateModelList(realm, modelList);
         realm.close();
     }
 
@@ -40,12 +40,20 @@ public class ModelManager {
      * @param <M>        the accepted type
      * @return a list with all models found
      */
-    public <M extends RealmObject> RealmResults<M> getModels(@NonNull Class<M> modelClass) {
+    public <M extends RealmObject> RealmResults<M> getModels(@NonNull final Realm realm, @NonNull Class<M> modelClass) {
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<M> models = getModels(realm, modelClass);
-        realm.close();
-        return models;
+        System.out.println(getClass().getName() + ": Current thread: " + Thread.currentThread().getName());
+        System.out.println("Realm instance: " + realm);
+        return realm.where(modelClass).findAll();
+        //        Realm realm = Realm.getDefaultInstance();
+        //        RealmResults<M> models = getModels(realm, modelClass);
+        //        realm.close();
+        //        return models;
+    }
+
+    public <M extends RealmObject> RealmResults<M> getModelsAsync(@NonNull final Realm realm, @NonNull Class<M> modelClass) {
+
+        return realm.where(modelClass).findAllAsync();
     }
 
     /**
@@ -120,11 +128,11 @@ public class ModelManager {
     ///////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////
 
-    private <M extends RealmObject> RealmResults<M> getModels(final Realm realm,
-                                                              Class<M> modelClass) {
-
-        return realm.where(modelClass).findAll();
-    }
+    //    private <M extends RealmObject> RealmResults<M> getModels(final Realm realm,
+    //                                                              Class<M> modelClass) {
+    //
+    //        return realm.where(modelClass).findAll();
+    //    }
 
     private <M extends RealmObject> void saveOrUpdateModelList(final Realm realm,
                                                                @NonNull List<M> modelList) {

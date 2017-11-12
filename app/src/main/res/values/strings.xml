@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Restaurant</string>
-    <string name="headline_customer_list">Reservations</string>
+    <string name="headline_customer_list">Customers</string>
+    <string name="headline_table_grid">Reservations</string>
 </resources>

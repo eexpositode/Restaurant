@@ -7,19 +7,19 @@ import io.reactivex.schedulers.Schedulers;
 
 public class RxSchedulerConfiguration {
 
-    public Scheduler getMainThread() {
+    public static Scheduler getMainThread() {
 
         return AndroidSchedulers.mainThread();
     }
 
-    public Scheduler getComputationThread() {
+    public static Scheduler getComputationThread() {
 
         return Schedulers.computation();
         //        return getThreadPoolExecutor(coreNumber());
     }
 
     // TODO: 8/11/17 use this for retrofit
-    public Scheduler getIOThread() {
+    public static Scheduler getIOThread() {
 
         return Schedulers.io();
     }

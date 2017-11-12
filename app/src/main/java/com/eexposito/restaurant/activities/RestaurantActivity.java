@@ -1,14 +1,17 @@
 package com.eexposito.restaurant.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.eexposito.restaurant.R;
-import com.eexposito.restaurant.presenter.CustomerPresenterImpl;
+import com.eexposito.restaurant.presenter.CustomerPresenter;
+import com.eexposito.restaurant.views.CustomerListView;
 
 import javax.inject.Inject;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 
 import dagger.android.AndroidInjection;
 
@@ -16,7 +19,10 @@ import dagger.android.AndroidInjection;
 public class RestaurantActivity extends AppCompatActivity {
 
     @Inject
-    CustomerPresenterImpl mCustomerPresenterImpl;
+    CustomerPresenter mCustomerPresenter;
+
+    @ViewById(R.id.restaurant_customer_list)
+    CustomerListView mCustomerListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +31,15 @@ public class RestaurantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
     }
 
-    public void showCustomerList() {
-        mCustomerPresenterImpl.loadData();
-    }
+    @AfterViews
+    public void afterViews() {
 
+        mCustomerListView.bind(mCustomerPresenter);
+    }
 
     @Override
     protected void onDestroy() {
+
         super.onDestroy();
     }
 }

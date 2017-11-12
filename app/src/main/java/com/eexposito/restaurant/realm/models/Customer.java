@@ -18,7 +18,7 @@ public class Customer extends RealmObject implements Model {
 
     public static final String FIRST_NAME = "customerFirstName";
     public static final String LAST_NAME = "customerLastName";
-    public static final String ORDER = "mOrder";
+    public static final String ORDER = "id";
 
     @PrimaryKey
     @Required
