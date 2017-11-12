@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.eexposito.restaurant.R;
+import com.eexposito.restaurant.adapters.CustomerListAdapter;
 import com.eexposito.restaurant.presenter.CustomerPresenter;
 import com.eexposito.restaurant.realm.models.Customer;
 
@@ -21,6 +22,7 @@ import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
 import dagger.android.AndroidInjection;
+import io.realm.RealmResults;
 
 @EViewGroup(R.layout.view_customer_list)
 public class CustomerListView extends FrameLayout implements Bindable<Customer> {
@@ -29,6 +31,7 @@ public class CustomerListView extends FrameLayout implements Bindable<Customer> 
     ListView mCustomerListView;
 
     CustomerPresenter mCustomerPresenter;
+
 
     public CustomerListView(@NonNull final Context context) {
 
@@ -55,6 +58,7 @@ public class CustomerListView extends FrameLayout implements Bindable<Customer> 
 
         mCustomerPresenter = customerPresenter;
         mCustomerPresenter.bind(this);
+
     }
 
     @Override
@@ -76,14 +80,16 @@ public class CustomerListView extends FrameLayout implements Bindable<Customer> 
 
     @Override
     public void onFetchDataCompleted() {
-        // Hide progres dialog
+        // Hide progress dialog
         Toast.makeText(getContext(), "Fetch data completed", Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onFetchDataSuccess(final List<Customer> modelList) {
+    public void onFetchDataSuccess(final RealmResults<Customer> modelList) {
         // Update list
         Toast.makeText(getContext(), "List found with size " + modelList.size(), Toast.LENGTH_LONG).show();
+        CustomerListAdapter customerListAdapter = new CustomerListAdapter(modelList);
+        mCustomerListView.setAdapter(customerListAdapter);
     }
 
     @Override

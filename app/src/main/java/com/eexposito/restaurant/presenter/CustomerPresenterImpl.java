@@ -66,23 +66,23 @@ public class CustomerPresenterImpl implements CustomerPresenter {
     @Override
     public void loadData() {
 
-        System.out.println(getClass().getName() + ": Current thread: " + Thread.currentThread().getName());
-        System.out.println("Realm instance: " + mRealmService.getRealm());
-
-        mCompositeDisposable.add(
-
-                mCustomerDataSource.getCustomers(mRealmService.getRealm(), false)
-                        .subscribeOn(RxSchedulerConfiguration.getComputationThread())
-                        .observeOn(RxSchedulerConfiguration.getMainThread())
-                        .subscribe(customers -> {
-                                    mViewWeakReference.get().onFetchDataSuccess(customers);
-                                    mViewWeakReference.get().onFetchDataCompleted();
-                                },
-                                error -> {
-                                    mViewWeakReference.get().onFetchDataError(error);
-                                    mViewWeakReference.get().onFetchDataCompleted();
-                                })
-        );
+//        System.out.println(getClass().getName() + ": Current thread: " + Thread.currentThread().getName());
+//        System.out.println("Realm instance: " + mRealmService.getRealm());
+//
+//        mCompositeDisposable.add(
+//
+//                mCustomerDataSource.getCustomers(mRealmService.getRealm(), false)
+//                        .subscribeOn(RxSchedulerConfiguration.getComputationThread())
+//                        .observeOn(RxSchedulerConfiguration.getMainThread())
+//                        .subscribe(customers -> {
+//                                    mViewWeakReference.get().onFetchDataSuccess(customers);
+//                                    mViewWeakReference.get().onFetchDataCompleted();
+//                                },
+//                                error -> {
+//                                    mViewWeakReference.get().onFetchDataError(error);
+//                                    mViewWeakReference.get().onFetchDataCompleted();
+//                                })
+//        );
     }
 
     @Override

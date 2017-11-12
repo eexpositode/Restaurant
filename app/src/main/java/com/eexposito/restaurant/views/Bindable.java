@@ -4,6 +4,7 @@ package com.eexposito.restaurant.views;
 import java.util.List;
 
 import io.realm.RealmModel;
+import io.realm.RealmResults;
 import okhttp3.ResponseBody;
 
 public interface Bindable<M extends RealmModel> {
@@ -12,7 +13,7 @@ public interface Bindable<M extends RealmModel> {
 
     void onFetchDataCompleted();
 
-    void onFetchDataSuccess(List<M> modelList);
+    void onFetchDataSuccess(RealmResults<M> modelList);
 //
 //    // TODO: 1/11/17 We need this?
 //    void onResponseFail(ResponseBody responseBody);
