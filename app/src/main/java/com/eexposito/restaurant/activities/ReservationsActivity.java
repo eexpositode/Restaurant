@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.presenter.CustomerPresenter;
-import com.eexposito.restaurant.presenter.TablePresenter;
 import com.eexposito.restaurant.views.CustomerListView;
-import com.eexposito.restaurant.views.TableGridView;
 
 import javax.inject.Inject;
 
@@ -21,17 +21,34 @@ import org.androidannotations.annotations.ViewById;
 import dagger.android.AndroidInjection;
 
 @EActivity(R.layout.activity_reservations)
-public class ReservationsActivity extends AppCompatActivity {
+public class ReservationsActivity extends AppCompatActivity implements CustomerListView.OnCustomerActionCallback {
+
+    public static final String RESERVATIONS_RESULT = "result";
 
     @Inject
     CustomerPresenter mCustomerPresenter;
 
+    @ViewById(R.id.reservations_dialog_view)
+    View mDialogView;
+
+    @ViewById(R.id.toolbar_text)
+    TextView mToolbarTitle;
+
+    @ViewById(R.id.toolbar_cancel)
+    View mCancel;
+
+    @ViewById(R.id.toolbar_accept)
+    View mAccept;
+
     @ViewById(R.id.reservations_customer_list)
     CustomerListView mCustomerListView;
 
-    public static final String RESERVATIONS_RESULT = "result";
+    @ViewById(R.id.reservations_date_time_view)
+    View mDateTimeView;
 
-    private String mTableID;
+
+    private String mSelectedTableID;
+    private String mSelectedCustomerID;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -40,8 +57,8 @@ public class ReservationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        mTableID = intent.getStringExtra(TableGridView.TABLE_ID);
-        if (mTableID == null) {
+        mSelectedTableID = intent.getStringExtra(RestaurantActivity.TABLE_ID);
+        if (mSelectedTableID == null) {
             showError("No table was selected or wrong table id was found.");
         }
     }
@@ -49,7 +66,14 @@ public class ReservationsActivity extends AppCompatActivity {
     @AfterViews
     public void init() {
 
-        mCustomerListView.bind(mCustomerPresenter);
+        mCustomerListView.bind(mCustomerPresenter, this);
+    }
+
+    // TODO: 12/11/17 any animation here
+    private void showDateTimePicker() {
+
+        mCustomerListView.setVisibility(View.INVISIBLE);
+        mDateTimeView.setVisibility(View.VISIBLE);
     }
 
     private void showError(final String errorMsg) {
@@ -60,4 +84,13 @@ public class ReservationsActivity extends AppCompatActivity {
         finish();
     }
 
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public void onCustomerClick(final String customerID) {
+
+        mSelectedCustomerID = customerID;
+        showDateTimePicker();
+    }
 }
