@@ -15,7 +15,10 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <include layout="@layout/view_toolbar"/>
+        <com.eexposito.restaurant.views.ToolbarView_
+            android:id="@+id/reservations_toolbar_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_headline_height"/>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -26,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
-            <FrameLayout
+            <com.eexposito.restaurant.views.CreateReservationView_
                 android:id="@+id/reservations_date_time_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>

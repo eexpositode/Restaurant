@@ -3,23 +3,8 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <LinearLayout
+    <ListView
+        android:id="@+id/customer_list_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:gravity="center_vertical"
-            android:layout_height="@dimen/default_headline_height"
-            android:layout_marginStart="@dimen/default_padding"
-            android:textSize="@dimen/default_headline_text_size"
-            android:text="@string/headline_customer_list"/>
-
-        <ListView
-            android:id="@+id/customer_list_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-    </LinearLayout>
+        android:layout_height="wrap_content"/>
 </FrameLayout>

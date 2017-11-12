@@ -17,6 +17,13 @@ import org.androidannotations.annotations.ViewById;
 @EViewGroup(R.layout.view_toolbar)
 public class ToolbarView extends FrameLayout {
 
+    public interface OnToolbarActionCallback {
+
+        void onCancelClicked();
+
+        void onAcceptClicked();
+    }
+
     @ViewById(R.id.toolbar_cancel)
     View mCancel;
 
@@ -25,6 +32,8 @@ public class ToolbarView extends FrameLayout {
 
     @ViewById(R.id.toolbar_text)
     TextView mHeadLine;
+
+    private OnToolbarActionCallback mCallback;
 
     public ToolbarView(@NonNull final Context context) {
 
@@ -46,12 +55,13 @@ public class ToolbarView extends FrameLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public void bind(@NonNull @StringRes int headlineID,
-                     @NonNull final OnClickListener onAccept,
-                     @NonNull final OnClickListener onCancel) {
+    public void bind(@NonNull final OnToolbarActionCallback callback) {
+
+        mCallback = callback;
+    }
+
+    public void updateTitle(@NonNull @StringRes int headlineID) {
 
         mHeadLine.setText(headlineID);
-        mCancel.setOnClickListener(onAccept);
-        mAccept.setOnClickListener(onCancel);
     }
 }
