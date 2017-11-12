@@ -12,15 +12,11 @@ import com.eexposito.restaurant.views.Bindable;
 import java.lang.ref.WeakReference;
 
 import io.reactivex.disposables.CompositeDisposable;
-import io.realm.RealmResults;
 
 public class CustomerPresenterImpl implements CustomerPresenter {
 
     @NonNull
-    private CustomerListDataSource mDataSource;
-
-    @NonNull
-    RxSchedulerConfiguration mSchedulerConfiguration;
+    private CustomerListDataSource mCustomerDataSource;
 
     CompositeDisposable mCompositeDisposable;
 
@@ -29,12 +25,10 @@ public class CustomerPresenterImpl implements CustomerPresenter {
     RealmService mRealmService;
 
     public CustomerPresenterImpl(@NonNull RealmService service,
-                                 @NonNull RxSchedulerConfiguration configuration,
-                                 @NonNull CustomerListDataSource dataSource) {
+                                 @NonNull CustomerListDataSource customerDataSource) {
 
         mRealmService = service;
-        mSchedulerConfiguration = configuration;
-        mDataSource = dataSource;
+        mCustomerDataSource = customerDataSource;
         mCompositeDisposable = new CompositeDisposable();
     }
 
@@ -53,15 +47,15 @@ public class CustomerPresenterImpl implements CustomerPresenter {
 
         mViewWeakReference.get().onFetchDataStarted();
 
-        if (mCompositeDisposable == null || mCompositeDisposable.size() == 0) {
+        if (mCompositeDisposable.size() == 0) {
             mCompositeDisposable.add(
 
-                    mRealmService.getAllModelsAsync(Customer.class)
-                            .filter(RealmResults::isLoaded)
-                            .filter(RealmResults::isValid)
-                            .filter(realmResults -> realmResults.size() > 0)
-                            .subscribe(mViewWeakReference.get()::onFetchDataSuccess,
-                                    mViewWeakReference.get()::onFetchDataError)
+                    mCustomerDataSource.getAllModelsAsync(mRealmService.getRealm(), Customer.class)
+                            //                            .filter(RealmResults::isLoaded)
+                            //                            .filter(RealmResults::isValid)
+                            //                            .filter(realmResults -> realmResults.size() > 0)
+                            .subscribe(customers -> mViewWeakReference.get().onFetchDataSuccess(customers),
+                                    error -> mViewWeakReference.get().onFetchDataError(error))
 
             );
         }
@@ -72,11 +66,14 @@ public class CustomerPresenterImpl implements CustomerPresenter {
     @Override
     public void loadData() {
 
+        System.out.println(getClass().getName() + ": Current thread: " + Thread.currentThread().getName());
+        System.out.println("Realm instance: " + mRealmService.getRealm());
+
         mCompositeDisposable.add(
 
-                mDataSource.getCustomers(false)
-                        .subscribeOn(mSchedulerConfiguration.getComputationThread())
-                        .observeOn(mSchedulerConfiguration.getMainThread())
+                mCustomerDataSource.getCustomers(mRealmService.getRealm(), false)
+                        .subscribeOn(RxSchedulerConfiguration.getComputationThread())
+                        .observeOn(RxSchedulerConfiguration.getMainThread())
                         .subscribe(customers -> {
                                     mViewWeakReference.get().onFetchDataSuccess(customers);
                                     mViewWeakReference.get().onFetchDataCompleted();

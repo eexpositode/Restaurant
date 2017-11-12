@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/table_item_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/default_padding"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/table_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/default_headline_text_size"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/default_padding"
+            android:textAllCaps="true"
+            tools:text="Table 1"/>
+
+        <TextView
+            android:id="@+id/table_item_customer_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textSize="@dimen/default_paragraph_1_text_size"
+            tools:text="Doe, John"/>
+
+        <TextView
+            android:id="@+id/table_item_reservation_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textSize="@dimen/default_paragraph_1_text_size"
+            tools:text="at 18:00"/>
+    </LinearLayout>
+</FrameLayout>

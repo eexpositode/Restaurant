@@ -14,10 +14,10 @@
             android:layout_height="@dimen/default_headline_height"
             android:layout_marginStart="@dimen/default_padding"
             android:textSize="@dimen/default_headline_text_size"
-            android:text="@string/headline_customer_list"/>
+            android:text="@string/headline_table_grid"/>
 
-        <ListView
-            android:id="@+id/customer_list_list_view"
+        <GridView
+            android:id="@+id/table_grid_grid_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>

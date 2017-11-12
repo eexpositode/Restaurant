@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="@dimen/default_horizontal_padding">
+        android:padding="@dimen/default_padding">
 
         <TextView
             android:id="@+id/customer_item_name"
