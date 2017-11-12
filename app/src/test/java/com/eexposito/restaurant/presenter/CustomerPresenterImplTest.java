@@ -2,7 +2,7 @@ package com.eexposito.restaurant.presenter;
 
 import com.eexposito.restaurant._support.BaseTest;
 import com.eexposito.restaurant._support.fixtures.TestCustomerView;
-import com.eexposito.restaurant.datasources.CustomerListDataSource;
+import com.eexposito.restaurant.datasources.CustomerDataSource;
 import com.eexposito.restaurant.realm.RealmService;
 import com.eexposito.restaurant.realm.models.Customer;
 import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
@@ -21,9 +20,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import io.reactivex.Observable;
-import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
@@ -47,7 +44,7 @@ public class CustomerPresenterImplTest extends BaseTest {
     RxSchedulerConfiguration mSchedulersConfiguration;
 
     @Mock
-    private CustomerListDataSource mDataSource;
+    private CustomerDataSource mDataSource;
 
     @Spy
     private TestCustomerView mView;

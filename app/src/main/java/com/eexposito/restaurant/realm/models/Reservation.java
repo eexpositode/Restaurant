@@ -16,18 +16,20 @@ public class Reservation extends RealmObject implements Model {
     @Required
     private String mID = UUID.randomUUID().toString();
 
-    public Table mTable;
+    private Customer mCustomer;
 
-    public Customer mCustomer;
+    private String mDateTime;
 
     public Reservation() {
+
         super();
     }
 
-    public Reservation(final Table table, final Customer customer) {
+    public Reservation(final Customer customer, final String dateTime) {
+
         super();
-        mTable = table;
         mCustomer = customer;
+        mDateTime = dateTime;
     }
     ////////////////////////////////////////////////////////////////////
     // Getters and Setters
@@ -40,22 +42,27 @@ public class Reservation extends RealmObject implements Model {
     }
 
     public Customer getCustomer() {
+
         return mCustomer;
     }
 
     public void setCustomer(final Customer customer) {
+
         mCustomer = customer;
     }
 
-    public Table getTable() {
-        return mTable;
+    public String getDateTime() {
+
+        return mDateTime;
     }
 
-    public void setTable(final Table table) {
-        mTable = table;
+    public void setDateTime(final String dateTime) {
+
+        mDateTime = dateTime;
     }
 
-
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
     @Override
     public boolean equals(Object obj) {
 
@@ -68,7 +75,7 @@ public class Reservation extends RealmObject implements Model {
 
         Reservation reservation = ((Reservation) obj);
         return new EqualsBuilder()
-                .append(mTable, reservation.mTable)
+                .append(mDateTime, reservation.mDateTime)
                 .append(mCustomer, reservation.mCustomer)
                 .isEquals();
     }

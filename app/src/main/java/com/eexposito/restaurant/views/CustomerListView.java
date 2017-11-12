@@ -12,26 +12,26 @@ import android.widget.Toast;
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.adapters.CustomerListAdapter;
 import com.eexposito.restaurant.presenter.CustomerPresenter;
+import com.eexposito.restaurant.presenter.DataCallback;
 import com.eexposito.restaurant.realm.models.Customer;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
-import dagger.android.AndroidInjection;
 import io.realm.RealmResults;
 
 @EViewGroup(R.layout.view_customer_list)
-public class CustomerListView extends FrameLayout implements Bindable<Customer> {
+public class CustomerListView extends FrameLayout implements DataCallback<Customer> {
+
+    @Inject
+    CustomerPresenter mPresenter;
 
     @ViewById(R.id.customer_list_list_view)
     ListView mCustomerListView;
 
-    CustomerPresenter mCustomerPresenter;
-
+    private CustomerListAdapter mCustomerListAdapter;
 
     public CustomerListView(@NonNull final Context context) {
 
@@ -54,18 +54,20 @@ public class CustomerListView extends FrameLayout implements Bindable<Customer> 
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public void bind(final CustomerPresenter customerPresenter) {
+    ///////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////
 
-        mCustomerPresenter = customerPresenter;
-        mCustomerPresenter.bind(this);
+    public void bind(@NonNull final CustomerPresenter presenter) {
 
+        mPresenter = presenter;
+        mPresenter.bind(this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
 
-        mCustomerPresenter.unBind();
-        mCustomerPresenter = null;
+        mPresenter.unBind();
+        mPresenter = null;
         super.onDetachedFromWindow();
     }
 
@@ -74,27 +76,27 @@ public class CustomerListView extends FrameLayout implements Bindable<Customer> 
     //////////////////////////////////////////////////////////////
     @Override
     public void onFetchDataStarted() {
-        // Show progress dialog
-        Toast.makeText(getContext(), "Fetch data started", Toast.LENGTH_LONG).show();
+
     }
 
     @Override
     public void onFetchDataCompleted() {
-        // Hide progress dialog
-        Toast.makeText(getContext(), "Fetch data completed", Toast.LENGTH_LONG).show();
+
     }
 
     @Override
     public void onFetchDataSuccess(final RealmResults<Customer> modelList) {
         // Update list
-        Toast.makeText(getContext(), "List found with size " + modelList.size(), Toast.LENGTH_LONG).show();
-        CustomerListAdapter customerListAdapter = new CustomerListAdapter(modelList);
-        mCustomerListView.setAdapter(customerListAdapter);
+        if (mCustomerListAdapter == null) {
+            mCustomerListAdapter = new CustomerListAdapter(modelList);
+            mCustomerListView.setAdapter(mCustomerListAdapter);
+        } else {
+            mCustomerListAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onFetchDataError(final Throwable e) {
-        // Show error dialog
-        Toast.makeText(getContext(), "Fetch data error: " + e, Toast.LENGTH_LONG).show();
+
     }
 }

@@ -15,7 +15,7 @@ import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class CustomerListDataSource {
+public class CustomerDataSource {
 
     @NonNull
     ModelManager mModelManager;
@@ -23,8 +23,8 @@ public class CustomerListDataSource {
     @NonNull
     ReservationsServiceApi mReservationsApi;
 
-    public CustomerListDataSource(@NonNull final ModelManager modelManager,
-                                  @NonNull final ReservationsServiceApi reservationApi) {
+    public CustomerDataSource(@NonNull final ModelManager modelManager,
+                              @NonNull final ReservationsServiceApi reservationApi) {
 
         mModelManager = modelManager;
         mReservationsApi = reservationApi;

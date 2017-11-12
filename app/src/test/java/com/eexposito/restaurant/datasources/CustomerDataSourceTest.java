@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
-public class CustomerListDataSourceTest extends BaseTest {
+public class CustomerDataSourceTest extends BaseTest {
 
     @Mock
     private
@@ -40,7 +40,7 @@ public class CustomerListDataSourceTest extends BaseTest {
     private ReservationsServiceApi mApi;
 
     @InjectMocks
-    CustomerListDataSource mDataSource;
+    CustomerDataSource mDataSource;
 
     private List<Customer> mTestCustomers;
 

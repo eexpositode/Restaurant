@@ -18,7 +18,8 @@
             android:layout_weight="1"
             android:layout_height="match_parent"/>
 
-        <com.eexposito.restaurant.views.TableGridView
+        <com.eexposito.restaurant.views.TableGridView_
+            android:id="@+id/restaurant_table_grid"
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="match_parent"/>

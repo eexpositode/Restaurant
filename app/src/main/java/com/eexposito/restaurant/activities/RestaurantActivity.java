@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.presenter.CustomerPresenter;
+import com.eexposito.restaurant.presenter.TablePresenter;
 import com.eexposito.restaurant.views.CustomerListView;
+import com.eexposito.restaurant.views.TableGridView;
 
 import javax.inject.Inject;
 
@@ -21,8 +23,14 @@ public class RestaurantActivity extends AppCompatActivity {
     @Inject
     CustomerPresenter mCustomerPresenter;
 
+    @Inject
+    TablePresenter mTablePresenter;
+
     @ViewById(R.id.restaurant_customer_list)
     CustomerListView mCustomerListView;
+
+    @ViewById(R.id.restaurant_table_grid)
+    TableGridView mTableGridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,7 @@ public class RestaurantActivity extends AppCompatActivity {
     public void afterViews() {
 
         mCustomerListView.bind(mCustomerPresenter);
+        mTableGridView.bind(mTablePresenter);
     }
 
     @Override
