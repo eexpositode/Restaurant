@@ -7,6 +7,8 @@
     <color name="colorPrimaryDark">@color/orange_700</color>
     <color name="colorAccent">@color/blue_grey_400</color>
 
+    <color name="traslucentBgColor">#CC78909C</color>
+
     <!-- Color palette -->
     <color name="white">#FFFFFF</color>
     <color name="red_400">#EF5350</color>

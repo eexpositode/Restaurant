@@ -5,9 +5,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.adapters.CustomerListAdapter;
@@ -17,6 +18,7 @@ import com.eexposito.restaurant.realm.models.Customer;
 
 import javax.inject.Inject;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
@@ -25,6 +27,11 @@ import io.realm.RealmResults;
 @EViewGroup(R.layout.view_customer_list)
 public class CustomerListView extends FrameLayout implements DataCallback<Customer> {
 
+    public interface OnCustomerActionCallback {
+
+        void onCustomerClick(final String customerID);
+    }
+
     @Inject
     CustomerPresenter mPresenter;
 
@@ -32,6 +39,7 @@ public class CustomerListView extends FrameLayout implements DataCallback<Custom
     ListView mCustomerListView;
 
     private CustomerListAdapter mCustomerListAdapter;
+    private OnCustomerActionCallback mCallback;
 
     public CustomerListView(@NonNull final Context context) {
 
@@ -54,13 +62,26 @@ public class CustomerListView extends FrameLayout implements DataCallback<Custom
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    @AfterViews
+    public void init() {
+
+        mCustomerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+                if (mCallback != null)
+                    mCallback.onCustomerClick(mCustomerListAdapter.getItem(position).getID());
+            }
+        });
+    }
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
 
-    public void bind(@NonNull final CustomerPresenter presenter) {
+    public void bind(@NonNull final CustomerPresenter presenter, @NonNull final OnCustomerActionCallback callback) {
 
         mPresenter = presenter;
         mPresenter.bind(this);
+        mCallback = callback;
     }
 
     @Override

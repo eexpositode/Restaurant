@@ -1,5 +1,6 @@
 package com.eexposito.restaurant.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -18,7 +19,10 @@ import org.androidannotations.annotations.ViewById;
 import dagger.android.AndroidInjection;
 
 @EActivity(R.layout.activity_restaurant)
-public class RestaurantActivity extends AppCompatActivity {
+public class RestaurantActivity extends AppCompatActivity implements TableGridView.OnTableActionCallback {
+
+    public static final String TABLE_ID = "TABLE_ID";
+    public static final int CREATE_RESERVATION_REQ_CODE = 1001;
 
     @Inject
     TablePresenter mTablePresenter;
@@ -36,12 +40,20 @@ public class RestaurantActivity extends AppCompatActivity {
     @AfterViews
     public void afterViews() {
 
-        mTableGridView.bind(mTablePresenter);
+        mTableGridView.bind(mTablePresenter, this);
     }
 
     @Override
     protected void onDestroy() {
 
         super.onDestroy();
+    }
+
+    @Override
+    public void onTableClick(final String tableID) {
+
+        Intent intent = new Intent(this, ReservationsActivity_.class);
+        intent.putExtra(TABLE_ID, tableID);
+        startActivityForResult(intent, CREATE_RESERVATION_REQ_CODE);
     }
 }
