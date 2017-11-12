@@ -18,5 +18,5 @@ public interface ReservationsServiceApi {
     Observable<List<Customer>> getCustomers();
 
     @GET(TABLE_JSON_URL)
-    Observable<TableReservationList> getTableAvailability();
+    Observable<List<Boolean>> getTableAvailability();
 }

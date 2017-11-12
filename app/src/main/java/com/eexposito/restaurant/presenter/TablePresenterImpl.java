@@ -3,27 +3,27 @@ package com.eexposito.restaurant.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.eexposito.restaurant.datasources.CustomerDataSource;
-import com.eexposito.restaurant.realm.models.Customer;
+import com.eexposito.restaurant.datasources.TableDataSource;
+import com.eexposito.restaurant.realm.models.Table;
 import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
 
 import java.lang.ref.WeakReference;
 
 import io.realm.Realm;
 
-public class CustomerPresenterImpl implements CustomerPresenter {
+public class TablePresenterImpl implements TablePresenter {
 
     private Realm mRealm;
-    private WeakReference<DataCallback<Customer>> mViewWeakReference;
-    private CustomerDataSource mCustomerDataSource;
+    private WeakReference<DataCallback<Table>> mViewWeakReference;
+    private TableDataSource mTableDataSource;
 
-    public CustomerPresenterImpl(@NonNull CustomerDataSource customerDataSource) {
+    public TablePresenterImpl(@NonNull TableDataSource tableDataSource) {
 
-        mCustomerDataSource = customerDataSource;
+        mTableDataSource = tableDataSource;
     }
 
     @Override
-    public void bind(final DataCallback<Customer> view) {
+    public void bind(final DataCallback<Table> view) {
 
         mRealm = Realm.getDefaultInstance();
         mViewWeakReference = new WeakReference<>(view);
@@ -35,8 +35,8 @@ public class CustomerPresenterImpl implements CustomerPresenter {
 
         mViewWeakReference.get().onFetchDataStarted();
 
-        mCustomerDataSource.getCustomersFromRealm(mRealm)
-                .subscribe(customers -> mViewWeakReference.get().onFetchDataSuccess(customers),
+        mTableDataSource.getTablesFromRealm(mRealm)
+                .subscribe(tables -> mViewWeakReference.get().onFetchDataSuccess(tables),
                         error -> mViewWeakReference.get().onFetchDataError(error));
 
         loadData();
@@ -45,11 +45,11 @@ public class CustomerPresenterImpl implements CustomerPresenter {
     @Override
     public void loadData() {
 
-        mCustomerDataSource.getCustomers(mRealm)
+        mTableDataSource.getTables(mRealm)
                 .subscribeOn(RxSchedulerConfiguration.getComputationThread())
                 .observeOn(RxSchedulerConfiguration.getMainThread())
-                .subscribe(customers -> {
-                            mViewWeakReference.get().onFetchDataSuccess(customers);
+                .subscribe(tables -> {
+                            mViewWeakReference.get().onFetchDataSuccess(tables);
                             mViewWeakReference.get().onFetchDataCompleted();
                         },
                         error -> {

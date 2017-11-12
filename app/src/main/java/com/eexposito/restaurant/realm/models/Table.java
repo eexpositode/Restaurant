@@ -14,6 +14,8 @@ public class Table extends RealmObject implements Model {
     @Required
     private String mID = UUID.randomUUID().toString();
 
+    private Reservation mReservation;
+
     public Table() {
         super();
     }
@@ -28,6 +30,12 @@ public class Table extends RealmObject implements Model {
         return mID;
     }
 
+    public Reservation getReservation() {
+
+        return mReservation;
+    }
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
     @Override
     public boolean equals(Object obj) {
 

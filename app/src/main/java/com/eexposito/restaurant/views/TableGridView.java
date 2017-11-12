@@ -6,9 +6,15 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.eexposito.restaurant.R;
-import com.eexposito.restaurant.realm.models.Reservation;
+import com.eexposito.restaurant.adapters.TableGridAdapter;
+import com.eexposito.restaurant.presenter.DataCallback;
+import com.eexposito.restaurant.presenter.TablePresenter;
+import com.eexposito.restaurant.realm.models.Table;
+
+import javax.inject.Inject;
 
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
@@ -16,10 +22,15 @@ import org.androidannotations.annotations.ViewById;
 import io.realm.RealmResults;
 
 @EViewGroup(R.layout.view_table_grid)
-public class TableGridView extends FrameLayout implements Bindable<Reservation> {
+public class TableGridView extends FrameLayout implements DataCallback<Table> {
+
+    @Inject
+    TablePresenter mPresenter;
 
     @ViewById(R.id.table_grid_grid_view)
     GridView mTableGridView;
+
+    private TableGridAdapter mTableGridAdapter;
 
     public TableGridView(@NonNull final Context context) {
 
@@ -44,23 +55,50 @@ public class TableGridView extends FrameLayout implements Bindable<Reservation> 
 
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
+
+    public void bind(@NonNull final TablePresenter presenter) {
+
+        mPresenter = presenter;
+        mPresenter.bind(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+
+        mPresenter.unBind();
+        mPresenter = null;
+        super.onDetachedFromWindow();
+    }
+
+
     @Override
     public void onFetchDataStarted() {
-
+        // Show progress dialog
+        Toast.makeText(getContext(), "Fetch data started", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onFetchDataCompleted() {
-
+        // Hide progress dialog
+        Toast.makeText(getContext(), "Fetch data completed", Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onFetchDataSuccess(final RealmResults<Reservation> modelList) {
+    public void onFetchDataSuccess(final RealmResults<Table> modelList) {
 
+        Toast.makeText(getContext(), "List found with size " + modelList.size(), Toast.LENGTH_LONG).show();
+
+        if (mTableGridAdapter == null) {
+            mTableGridAdapter = new TableGridAdapter(modelList);
+            mTableGridView.setAdapter(mTableGridAdapter);
+        } else {
+            mTableGridAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onFetchDataError(final Throwable e) {
-
+        // Show error dialog
+        Toast.makeText(getContext(), "Fetch data error: " + e, Toast.LENGTH_LONG).show();
     }
 }
