@@ -9,6 +9,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.eexposito.restaurant.R;
+import com.eexposito.restaurant.realm.models.Customer;
+import com.eexposito.restaurant.realm.models.Table;
 
 import java.util.Calendar;
 
@@ -63,12 +65,18 @@ public class CreateReservationView extends FrameLayout {
         mCallback = callback;
     }
 
-    public void setValues(@NonNull final String selectedTableID,
-                          @Nullable String selectedCustomerID,
-                          @Nullable final String selectedDateTime) {
+    public void setSelectedTable(@NonNull String selectedTable) {
 
-        mSelectedTable.setText(selectedTableID);
-        mSelectedCustomer.setText(selectedCustomerID);
+        mSelectedTable.setText(selectedTable);
+    }
+
+    public void setSelectedCustomer(@NonNull String selectedCustomer) {
+
+        mSelectedCustomer.setText(selectedCustomer);
+    }
+
+    public void setSelectedTime(@Nullable final String selectedDateTime) {
+
         mSelectedTime.setText(selectedDateTime);
     }
 

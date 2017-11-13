@@ -4,7 +4,8 @@ package com.eexposito.restaurant.presenter;
 import android.support.annotation.NonNull;
 
 import com.eexposito.restaurant.datasources.TableDataSource;
-import com.eexposito.restaurant.realm.models.Table;
+import com.eexposito.restaurant.presenter.callbacks.BaseCallback;
+import com.eexposito.restaurant.presenter.callbacks.ProgressCallback;
 import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
 
 import java.lang.ref.WeakReference;
@@ -14,7 +15,7 @@ import io.realm.Realm;
 public class TablePresenterImpl implements TablePresenter {
 
     private Realm mRealm;
-    private WeakReference<DataCallback<Table>> mViewWeakReference;
+    private WeakReference<ProgressCallback> mViewWeakReference;
     private TableDataSource mTableDataSource;
 
     public TablePresenterImpl(@NonNull TableDataSource tableDataSource) {
@@ -23,10 +24,10 @@ public class TablePresenterImpl implements TablePresenter {
     }
 
     @Override
-    public void bind(final DataCallback<Table> view) {
+    public void bind(final BaseCallback view) {
 
         mRealm = Realm.getDefaultInstance();
-        mViewWeakReference = new WeakReference<>(view);
+        mViewWeakReference = new WeakReference<>((ProgressCallback) view);
 
         loadDataOnBind();
     }
@@ -42,8 +43,7 @@ public class TablePresenterImpl implements TablePresenter {
         loadData();
     }
 
-    @Override
-    public void loadData() {
+    private void loadData() {
 
         mTableDataSource.getTables(mRealm)
                 .subscribeOn(RxSchedulerConfiguration.getComputationThread())

@@ -13,7 +13,7 @@ import io.realm.RealmResults;
 public class ModelManager {
 
     public <M extends RealmObject> RealmResults<M> getAllModels(@NonNull final Realm realm,
-                                                                 @NonNull final Class<M> modelClass) {
+                                                                @NonNull final Class<M> modelClass) {
 
         return realm.where(modelClass).findAll();
     }
@@ -30,6 +30,11 @@ public class ModelManager {
         return models.stream().anyMatch(predicate);
     }
 
+    public <M extends RealmObject> RealmResults<M> getModelByField(final Realm realm, final Class<M> modelClass, final String field, final String value) {
+
+        return realm.where(modelClass).equalTo(field, value).findAll();
+    }
+    
     //    /**
     //     * Save a list of RealmObjects
     //     *

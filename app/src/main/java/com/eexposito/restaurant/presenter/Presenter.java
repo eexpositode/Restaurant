@@ -1,17 +1,15 @@
 package com.eexposito.restaurant.presenter;
 
 
-import io.realm.RealmObject;
+import com.eexposito.restaurant.presenter.callbacks.BaseCallback;
 
-public interface Presenter<M extends RealmObject> {
+public interface Presenter {
 
-    void bind(final DataCallback<M> view);
+    void bind(final BaseCallback view);
 
     void unBind();
 
     boolean isViewBound();
-
-    void loadData();
 
     void onDestroy();
 }

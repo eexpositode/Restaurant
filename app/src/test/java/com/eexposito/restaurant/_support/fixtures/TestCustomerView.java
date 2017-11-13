@@ -1,12 +1,12 @@
 package com.eexposito.restaurant._support.fixtures;
 
 import com.eexposito.restaurant.realm.models.Customer;
-import com.eexposito.restaurant.presenter.DataCallback;
+import com.eexposito.restaurant.presenter.callbacks.ProgressCallback;
 
 import java.util.List;
 
 
-public class TestCustomerView implements DataCallback<Customer> {
+public class TestCustomerView implements ProgressCallback<Customer> {
 
     @Override
     public void onFetchDataStarted() {

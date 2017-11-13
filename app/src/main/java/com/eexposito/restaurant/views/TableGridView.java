@@ -10,11 +10,8 @@ import android.widget.Toast;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.adapters.TableGridAdapter;
-import com.eexposito.restaurant.presenter.DataCallback;
-import com.eexposito.restaurant.presenter.TablePresenter;
+import com.eexposito.restaurant.presenter.callbacks.ProgressCallback;
 import com.eexposito.restaurant.realm.models.Table;
-
-import javax.inject.Inject;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EViewGroup;
@@ -23,7 +20,7 @@ import org.androidannotations.annotations.ViewById;
 import io.realm.RealmResults;
 
 @EViewGroup(R.layout.view_table_grid)
-public class TableGridView extends FrameLayout implements DataCallback<Table> {
+public class TableGridView extends FrameLayout implements ProgressCallback<Table> {
 
     public interface OnTableActionCallback {
 
@@ -61,8 +58,9 @@ public class TableGridView extends FrameLayout implements DataCallback<Table> {
     public void init() {
 
         mTableGridView.setOnItemClickListener((parent, view, position, id) -> {
-            if (mCallback != null)
+            if (mCallback != null) {
                 mCallback.onTableClick(mTableGridAdapter.getItem(position).getID());
+            }
         });
     }
 
@@ -96,6 +94,7 @@ public class TableGridView extends FrameLayout implements DataCallback<Table> {
     public void onFetchDataSuccess(final RealmResults<Table> modelList) {
 
         Toast.makeText(getContext(), "List found with size " + modelList.size(), Toast.LENGTH_LONG).show();
+
 
         if (mTableGridAdapter == null) {
             mTableGridAdapter = new TableGridAdapter(modelList);
