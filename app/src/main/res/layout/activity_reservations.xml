@@ -7,33 +7,38 @@
     android:background="@color/traslucentBgColor"
     tools:context=".activities.RestaurantActivity_">
 
-    <LinearLayout
-        android:id="@+id/reservations_dialog_view"
-        android:layout_width="@dimen/default_dialog_width"
-        android:layout_height="@dimen/default_dialog_height"
-        android:layout_gravity="center"
-        android:background="@color/white"
-        android:orientation="vertical">
+    <com.eexposito.restaurant.views.ResizableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
 
-        <com.eexposito.restaurant.views.ToolbarView_
-            android:id="@+id/reservations_toolbar_header"
+        <LinearLayout
+            android:id="@+id/reservations_dialog_view"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/default_headline_height"/>
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.eexposito.restaurant.views.CustomerListView_
-                android:id="@+id/reservations_customer_list"
+            <com.eexposito.restaurant.views.ToolbarView_
+                android:id="@+id/reservations_toolbar_header"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="@dimen/default_headline_height"/>
 
-            <com.eexposito.restaurant.views.CreateReservationView_
-                android:id="@+id/reservations_date_time_view"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </FrameLayout>
+                android:layout_height="match_parent">
 
-    </LinearLayout>
+                <com.eexposito.restaurant.views.CustomerListView_
+                    android:id="@+id/reservations_customer_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <com.eexposito.restaurant.views.CreateReservationView_
+                    android:id="@+id/reservations_date_time_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </FrameLayout>
+
+        </LinearLayout>
+    </com.eexposito.restaurant.views.ResizableLayout>
 </FrameLayout>
