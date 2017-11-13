@@ -2,24 +2,25 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
-             android:layout_height="match_parent">
+             android:layout_height="match_parent"
+             android:background="@drawable/bg_table_border">
 
     <LinearLayout
         android:id="@+id/table_item_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/default_padding"
+        android:gravity="center"
         android:orientation="vertical"
-        android:gravity="center">
+        android:padding="@dimen/default_padding">
 
         <TextView
             android:id="@+id/table_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/default_headline_text_size"
-            android:gravity="center_horizontal"
             android:layout_marginBottom="@dimen/default_padding"
+            android:gravity="center_horizontal"
             android:textAllCaps="true"
+            android:textSize="@dimen/default_headline_text_size"
             tools:text="Table 1"/>
 
         <TextView
