@@ -66,6 +66,18 @@ public class ReservationsPresenterImpl implements ReservationsPresenter {
     }
 
     @Override
+    public void createReservation(@NonNull final String tableID, @NonNull final String customerID, @NonNull final String time) {
+
+        mDataSource.createReservation(tableID, customerID, time);
+    }
+
+    @Override
+    public void removeReservation(@NonNull final Table table) {
+
+        mDataSource.removeReservation(table);
+    }
+
+    @Override
     public boolean isViewBound() {
 
         return mViewWeakReference != null && mViewWeakReference.get() != null;

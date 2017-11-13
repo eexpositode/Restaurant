@@ -2,7 +2,6 @@ package com.eexposito.restaurant.datasources;
 
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.eexposito.restaurant.realm.ModelManager;
 import com.eexposito.restaurant.realm.exceptions.BusinessError;
@@ -57,5 +56,15 @@ public class ReservationsDataSource {
             throw new BusinessException(BusinessError.DATA_NOT_FOUND);
         }
         return found;
+    }
+
+    public void createReservation(@NonNull final String tableID, @NonNull final String customerID, @NonNull final String time) {
+
+        mModelManager.createReservation(tableID, customerID, time);
+    }
+
+    public void removeReservation(final Table table) {
+
+        mModelManager.removeReservation(table);
     }
 }

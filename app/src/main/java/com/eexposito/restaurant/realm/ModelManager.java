@@ -3,6 +3,10 @@ package com.eexposito.restaurant.realm;
 
 import android.support.annotation.NonNull;
 
+import com.eexposito.restaurant.realm.models.Customer;
+import com.eexposito.restaurant.realm.models.Reservation;
+import com.eexposito.restaurant.realm.models.Table;
+
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -34,7 +38,38 @@ public class ModelManager {
 
         return realm.where(modelClass).equalTo(field, value).findAll();
     }
-    
+
+    public void createReservation(@NonNull final String tableID, @NonNull final String customerID, @NonNull final String time) {
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(realm1 -> {
+
+            Table table = getModelByField(realm1, Table.class, Table.ID, tableID).first();
+            Customer customer = getModelByField(realm1, Customer.class, Customer.ID, customerID).first();
+            Reservation reservation = realm1.copyToRealm(new Reservation(customer, time));
+            table.setReservation(reservation);
+            realm1.insertOrUpdate(table);
+        });
+        realm.close();
+    }
+
+    public void removeReservation(final Table table) {
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(realm1 -> {
+
+            RealmResults<Reservation> rows = getModelByField(
+                    realm1,
+                    Reservation.class,
+                    Reservation.ID,
+                    table.getReservation().getID());
+            rows.deleteAllFromRealm();
+            table.setReservation(null);
+            realm1.insertOrUpdate(table);
+        });
+        realm.close();
+    }
+
     //    /**
     //     * Save a list of RealmObjects
     //     *

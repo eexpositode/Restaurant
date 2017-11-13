@@ -34,22 +34,4 @@ public class ReservationsActivityModule {
 
         return new CustomerPresenterImpl(dataSource);
     }
-
-    @Provides
-    public ReservationsDataSource provideReservationsDataSource(ModelManager modelManager) {
-
-        return new ReservationsDataSource(modelManager);
-    }
-
-    /**
-     * Presenter for {@link ReservationsActivity}
-     *
-     * @param dataSource
-     * @return
-     */
-    @Provides
-    public ReservationsPresenter provideReservationsPresenter(ReservationsDataSource dataSource) {
-
-        return new ReservationsPresenterImpl(dataSource);
-    }
 }
