@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
-             android:layout_height="match_parent"
+             android:layout_height="@dimen/default_grid_cell_height"
              android:background="@drawable/bg_table_border">
 
     <LinearLayout
@@ -11,15 +11,15 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="@dimen/default_padding">
+        android:padding="@dimen/default_cell_padding">
 
         <TextView
             android:id="@+id/table_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/default_padding"
             android:gravity="center_horizontal"
             android:textAllCaps="true"
+            android:layout_marginBottom="@dimen/default_cell_padding"
             android:textSize="@dimen/default_headline_text_size"
             tools:text="Table 1"/>
 
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:textSize="@dimen/default_paragraph_1_text_size"
+            android:textSize="@dimen/default_paragraph_2_text_size"
             tools:text="Doe, John"/>
 
         <TextView

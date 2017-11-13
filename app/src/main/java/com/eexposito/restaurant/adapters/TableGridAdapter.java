@@ -53,8 +53,10 @@ public class TableGridAdapter extends RealmBaseAdapter<Table> {
 
         if (table.getReservation() == null) {
             viewHolder.mTimeTextView.setText("");
+            viewHolder.mTimeTextView.setVisibility(View.GONE);
         } else {
             viewHolder.mTimeTextView.setText(table.getReservation().getDateTime());
+            viewHolder.mTimeTextView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -62,9 +64,11 @@ public class TableGridAdapter extends RealmBaseAdapter<Table> {
 
         if (table.getReservation() == null) {
             viewHolder.mCustomerNameTextView.setText("");
+            viewHolder.mTimeTextView.setVisibility(View.GONE);
         } else {
             Customer customer = table.getReservation().getCustomer();
             viewHolder.mCustomerNameTextView.setText(customer.getLastName() + ", " + customer.getFirstName());
+            viewHolder.mTimeTextView.setVisibility(View.VISIBLE);
         }
     }
 
