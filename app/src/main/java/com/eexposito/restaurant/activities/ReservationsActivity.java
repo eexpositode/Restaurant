@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.presenter.CustomerPresenter;
@@ -32,7 +33,9 @@ public class ReservationsActivity extends AppCompatActivity implements
         CustomerListView.OnCustomerActionCallback,
         ToolbarView.OnToolbarActionCallback, CreateReservationView.OnCreateReservationActionCallback {
 
-    public static final String RESERVATIONS_RESULT = "result";
+    public static final String RESERVATIONS_ERR_RESULT = "ERR_RESULT";
+    public static final String RESERVATIONS_CUSTOMER_ID = "SELECTED_CUSTOMER";
+    public static final String RESERVATIONS_TIME = "SELECTED_TIME";
 
     @Inject
     ReservationsPresenter mReservationsPresenter;
@@ -71,7 +74,7 @@ public class ReservationsActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         String selectedTableID = intent.getStringExtra(RestaurantActivity.TABLE_ID);
         if (selectedTableID == null) {
-            showError(getString(R.string.reservations_no_table_selected));
+            finishWithError(getString(R.string.reservations_no_table_selected));
         }
 
         mReservationsPresenter.bind(this);
@@ -86,6 +89,20 @@ public class ReservationsActivity extends AppCompatActivity implements
         mToolbarView.bind(this);
 
         showCreateReservationView();
+    }
+
+    @Override
+    protected void onPause() {
+
+        mCustomerPresenter.unBind();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        mCustomerPresenter.onDestroy();
+        super.onDestroy();
     }
 
     private void showCreateReservationView() {
@@ -106,28 +123,18 @@ public class ReservationsActivity extends AppCompatActivity implements
         mCreateReservationView.setVisibility(View.INVISIBLE);
     }
 
-    private void showError(final String errorMsg) {
+    private void finishWithError(final String errorMsg) {
 
         Intent returnIntent = new Intent();
-        returnIntent.putExtra(RESERVATIONS_RESULT, errorMsg);
+        returnIntent.putExtra(RESERVATIONS_ERR_RESULT, errorMsg);
         setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
     }
 
-    @Override
-    protected void onPause() {
+    private void showError(@NonNull final String error) {
 
-        mCustomerPresenter.unBind();
-        super.onPause();
+        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
     }
-
-    @Override
-    protected void onDestroy() {
-
-        mCustomerPresenter.onDestroy();
-        super.onDestroy();
-    }
-
     /////////////////////////////////////////////////////////////////////////////////
     // Reservations presenter callbacks
     /////////////////////////////////////////////////////////////////////////////////
@@ -135,6 +142,7 @@ public class ReservationsActivity extends AppCompatActivity implements
     @Override
     public void onFetchDataError(final Throwable e) {
 
+        showError(getString(R.string.reservations_on_fetch_data_err, e.toString()));
     }
 
     @Override
@@ -183,16 +191,26 @@ public class ReservationsActivity extends AppCompatActivity implements
     public void onAcceptClicked() {
 
         if (mSelectedCustomer == null) {
-            // TODO: 12/11/17 Show error dialog
+            showError(getString(R.string.reservations_select_customer_err));
+            return;
         }
         if (mSelectedReservationTime == null) {
-            // TODO: 12/11/17 Show error dialog
+            showError(getString(R.string.reservations_select_time_err));
+            return;
         }
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(RESERVATIONS_CUSTOMER_ID, mSelectedCustomer.getID());
+        returnIntent.putExtra(RESERVATIONS_TIME, mSelectedReservationTime);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
 
     @Override
     public void onCancelClicked() {
 
-        // TODO: 12/11/17 Show are you sure dialog
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_CANCELED, returnIntent);
+        finish();
     }
 }

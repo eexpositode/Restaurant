@@ -5,12 +5,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.eexposito.restaurant.R;
 
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
@@ -23,12 +23,6 @@ public class ToolbarView extends FrameLayout {
 
         void onAcceptClicked();
     }
-
-    @ViewById(R.id.toolbar_cancel)
-    View mCancel;
-
-    @ViewById(R.id.toolbar_accept)
-    View mAccept;
 
     @ViewById(R.id.toolbar_text)
     TextView mHeadLine;
@@ -63,5 +57,21 @@ public class ToolbarView extends FrameLayout {
     public void updateTitle(@NonNull @StringRes int headlineID) {
 
         mHeadLine.setText(headlineID);
+    }
+
+    @Click(R.id.toolbar_accept)
+    public void onAcceptClicked() {
+
+        if (mCallback != null) {
+            mCallback.onAcceptClicked();
+        }
+    }
+
+    @Click(R.id.toolbar_cancel)
+    public void onCancelClicked() {
+
+        if (mCallback != null) {
+            mCallback.onCancelClicked();
+        }
     }
 }
