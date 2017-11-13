@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.eexposito.restaurant.R;
-import com.eexposito.restaurant.presenter.CustomerPresenter;
 import com.eexposito.restaurant.presenter.TablePresenter;
-import com.eexposito.restaurant.views.CustomerListView;
 import com.eexposito.restaurant.views.TableGridView;
 
 import javax.inject.Inject;
@@ -40,12 +38,21 @@ public class RestaurantActivity extends AppCompatActivity implements TableGridVi
     @AfterViews
     public void afterViews() {
 
-        mTableGridView.bind(mTablePresenter, this);
+        mTableGridView.bind(this);
+        mTablePresenter.bind(mTableGridView);
+    }
+
+    @Override
+    protected void onPause() {
+
+        mTablePresenter.unBind();
+        super.onPause();
     }
 
     @Override
     protected void onDestroy() {
 
+        mTablePresenter.onDestroy();
         super.onDestroy();
     }
 

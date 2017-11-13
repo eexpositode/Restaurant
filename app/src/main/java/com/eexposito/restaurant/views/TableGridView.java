@@ -30,9 +30,6 @@ public class TableGridView extends FrameLayout implements DataCallback<Table> {
         void onTableClick(final String tableID);
     }
 
-    @Inject
-    TablePresenter mPresenter;
-
     @ViewById(R.id.table_grid_grid_view)
     GridView mTableGridView;
 
@@ -72,18 +69,14 @@ public class TableGridView extends FrameLayout implements DataCallback<Table> {
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
 
-    public void bind(@NonNull final TablePresenter presenter, @NonNull final OnTableActionCallback callback) {
+    public void bind(@NonNull final OnTableActionCallback callback) {
 
-        mPresenter = presenter;
-        mPresenter.bind(this);
         mCallback = callback;
     }
 
     @Override
     protected void onDetachedFromWindow() {
 
-        mPresenter.unBind();
-        mPresenter = null;
         super.onDetachedFromWindow();
     }
 

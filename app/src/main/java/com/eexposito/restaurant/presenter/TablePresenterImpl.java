@@ -60,6 +60,12 @@ public class TablePresenterImpl implements TablePresenter {
     }
 
     @Override
+    public boolean isViewBound() {
+
+        return mViewWeakReference != null && mViewWeakReference.get() != null;
+    }
+
+    @Override
     public void unBind() {
 
         mViewWeakReference = null;

@@ -32,9 +32,6 @@ public class CustomerListView extends FrameLayout implements DataCallback<Custom
         void onCustomerClick(final String customerID);
     }
 
-    @Inject
-    CustomerPresenter mPresenter;
-
     @ViewById(R.id.customer_list_list_view)
     ListView mCustomerListView;
 
@@ -77,18 +74,14 @@ public class CustomerListView extends FrameLayout implements DataCallback<Custom
     ///////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
 
-    public void bind(@NonNull final CustomerPresenter presenter, @NonNull final OnCustomerActionCallback callback) {
+    public void bind(@NonNull final OnCustomerActionCallback callback) {
 
-        mPresenter = presenter;
-        mPresenter.bind(this);
         mCallback = callback;
     }
 
     @Override
     protected void onDetachedFromWindow() {
 
-        mPresenter.unBind();
-        mPresenter = null;
         super.onDetachedFromWindow();
     }
 
