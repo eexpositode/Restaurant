@@ -42,6 +42,11 @@ public class Table extends RealmObject implements Model {
         return mReservation;
     }
 
+    public void setReservation(final Reservation reservation) {
+
+        mReservation = reservation;
+    }
+
     public int getOrder() {
 
         return mOrder;

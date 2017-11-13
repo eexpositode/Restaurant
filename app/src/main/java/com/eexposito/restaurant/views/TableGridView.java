@@ -24,7 +24,7 @@ public class TableGridView extends FrameLayout implements ProgressCallback<Table
 
     public interface OnTableActionCallback {
 
-        void onTableClick(final String tableID);
+        void onTableClick(final Table table);
     }
 
     @ViewById(R.id.table_grid_grid_view)
@@ -59,7 +59,7 @@ public class TableGridView extends FrameLayout implements ProgressCallback<Table
 
         mTableGridView.setOnItemClickListener((parent, view, position, id) -> {
             if (mCallback != null) {
-                mCallback.onTableClick(mTableGridAdapter.getItem(position).getID());
+                mCallback.onTableClick(mTableGridAdapter.getItem(position));
             }
         });
     }

@@ -33,7 +33,7 @@ public class ReservationsActivity extends AppCompatActivity implements
         CustomerListView.OnCustomerActionCallback,
         ToolbarView.OnToolbarActionCallback, CreateReservationView.OnCreateReservationActionCallback {
 
-    public static final String RESERVATIONS_ERR_RESULT = "ERR_RESULT";
+    public static final String RESERVATIONS_TABLE_ID = "SELECTED_TABLE";
     public static final String RESERVATIONS_CUSTOMER_ID = "SELECTED_CUSTOMER";
     public static final String RESERVATIONS_TIME = "SELECTED_TIME";
 
@@ -126,7 +126,6 @@ public class ReservationsActivity extends AppCompatActivity implements
     private void finishWithError(final String errorMsg) {
 
         Intent returnIntent = new Intent();
-        returnIntent.putExtra(RESERVATIONS_ERR_RESULT, errorMsg);
         setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
     }
@@ -200,6 +199,7 @@ public class ReservationsActivity extends AppCompatActivity implements
         }
 
         Intent returnIntent = new Intent();
+        returnIntent.putExtra(RESERVATIONS_TABLE_ID, mSelectedTable.getID());
         returnIntent.putExtra(RESERVATIONS_CUSTOMER_ID, mSelectedCustomer.getID());
         returnIntent.putExtra(RESERVATIONS_TIME, mSelectedReservationTime);
         setResult(Activity.RESULT_OK, returnIntent);
