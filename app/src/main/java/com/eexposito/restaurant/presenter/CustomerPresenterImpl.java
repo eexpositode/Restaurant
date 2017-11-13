@@ -60,6 +60,12 @@ public class CustomerPresenterImpl implements CustomerPresenter {
     }
 
     @Override
+    public boolean isViewBound() {
+
+        return mViewWeakReference != null && mViewWeakReference.get() != null;
+    }
+
+    @Override
     public void unBind() {
 
         mViewWeakReference = null;

@@ -7,9 +7,11 @@ public interface Presenter<M extends RealmObject> {
 
     void bind(final DataCallback<M> view);
 
-    void loadData();
-
     void unBind();
+
+    boolean isViewBound();
+
+    void loadData();
 
     void onDestroy();
 }

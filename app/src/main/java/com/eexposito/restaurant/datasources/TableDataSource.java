@@ -44,6 +44,7 @@ public class TableDataSource {
 
     private Observable<RealmResults<Table>> getTablesFromRetrofit(@NonNull final Realm realm) {
 
+        // TODO: 13/11/17 Put some internet checking stuff
         return mReservationsApi.getTableAvailability()
                 .subscribeOn(RxSchedulerConfiguration.getIOThread())
                 .observeOn(RxSchedulerConfiguration.getComputationThread())

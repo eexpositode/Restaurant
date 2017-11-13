@@ -87,7 +87,10 @@ public class ReservationsActivity extends AppCompatActivity implements CustomerL
     // TODO: 12/11/17 any animation here
     private void showCustomerList() {
 
-        mCustomerListView.bind(mCustomerPresenter, this);
+        if (!mCustomerPresenter.isViewBound()) {
+            mCustomerPresenter.bind(mCustomerListView);
+        }
+        mCustomerListView.bind(this);
         mCustomerListView.setVisibility(View.VISIBLE);
         mCreateReservationView.setVisibility(View.INVISIBLE);
     }
@@ -98,6 +101,20 @@ public class ReservationsActivity extends AppCompatActivity implements CustomerL
         returnIntent.putExtra(RESERVATIONS_RESULT, errorMsg);
         setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
+    }
+
+    @Override
+    protected void onPause() {
+
+        mCustomerPresenter.unBind();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        mCustomerPresenter.onDestroy();
+        super.onDestroy();
     }
 
     /////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +150,6 @@ public class ReservationsActivity extends AppCompatActivity implements CustomerL
         if (mSelectedReservationTime == null) {
             // TODO: 12/11/17 Show error dialog
         }
-
     }
 
     @Override
