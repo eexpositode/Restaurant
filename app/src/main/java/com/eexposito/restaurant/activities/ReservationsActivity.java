@@ -3,12 +3,17 @@ package com.eexposito.restaurant.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.presenter.CustomerPresenter;
+import com.eexposito.restaurant.presenter.ReservationsPresenter;
+import com.eexposito.restaurant.presenter.callbacks.ReservationsCallback;
+import com.eexposito.restaurant.realm.models.Customer;
+import com.eexposito.restaurant.realm.models.Table;
 import com.eexposito.restaurant.views.CreateReservationView;
 import com.eexposito.restaurant.views.CustomerListView;
 import com.eexposito.restaurant.views.ToolbarView;
@@ -22,10 +27,15 @@ import org.androidannotations.annotations.ViewById;
 import dagger.android.AndroidInjection;
 
 @EActivity(R.layout.activity_reservations)
-public class ReservationsActivity extends AppCompatActivity implements CustomerListView.OnCustomerActionCallback,
+public class ReservationsActivity extends AppCompatActivity implements
+        ReservationsCallback,
+        CustomerListView.OnCustomerActionCallback,
         ToolbarView.OnToolbarActionCallback, CreateReservationView.OnCreateReservationActionCallback {
 
     public static final String RESERVATIONS_RESULT = "result";
+
+    @Inject
+    ReservationsPresenter mReservationsPresenter;
 
     @Inject
     CustomerPresenter mCustomerPresenter;
@@ -48,9 +58,8 @@ public class ReservationsActivity extends AppCompatActivity implements CustomerL
     @ViewById(R.id.reservations_date_time_view)
     CreateReservationView mCreateReservationView;
 
-
-    private String mSelectedTableID;
-    private String mSelectedCustomerID;
+    private Table mSelectedTable;
+    private Customer mSelectedCustomer;
     private String mSelectedReservationTime;
 
     @Override
@@ -60,10 +69,13 @@ public class ReservationsActivity extends AppCompatActivity implements CustomerL
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        mSelectedTableID = intent.getStringExtra(RestaurantActivity.TABLE_ID);
-        if (mSelectedTableID == null) {
+        String selectedTableID = intent.getStringExtra(RestaurantActivity.TABLE_ID);
+        if (selectedTableID == null) {
             showError(getString(R.string.reservations_no_table_selected));
         }
+
+        mReservationsPresenter.bind(this);
+        mReservationsPresenter.getTableFromID(selectedTableID);
     }
 
     @AfterViews
@@ -81,7 +93,6 @@ public class ReservationsActivity extends AppCompatActivity implements CustomerL
         mCustomerListView.setVisibility(View.INVISIBLE);
         mCreateReservationView.setVisibility(View.VISIBLE);
         mCreateReservationView.bind(this);
-        mCreateReservationView.setValues(mSelectedTableID, mSelectedCustomerID, mSelectedReservationTime);
     }
 
     // TODO: 12/11/17 any animation here
@@ -118,8 +129,34 @@ public class ReservationsActivity extends AppCompatActivity implements CustomerL
     }
 
     /////////////////////////////////////////////////////////////////////////////////
+    // Reservations presenter callbacks
     /////////////////////////////////////////////////////////////////////////////////
 
+    @Override
+    public void onFetchDataError(final Throwable e) {
+
+    }
+
+    @Override
+    public void onFetchTableByID(@NonNull final Table table) {
+
+        mSelectedTable = table;
+        mCreateReservationView.setSelectedTable("Table " + table.getOrder());
+    }
+
+    @Override
+    public void onFetchCustomerByID(@NonNull final Customer customer) {
+
+        mSelectedCustomer = customer;
+        mCreateReservationView.setSelectedCustomer(
+                getString(R.string.customer_formatted_name,
+                        String.valueOf(customer.getOrder() + 1),
+                        customer.getLastName(),
+                        customer.getFirstName()));
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
     @Override
     public void onSelectCustomerClicked() {
 
@@ -130,21 +167,22 @@ public class ReservationsActivity extends AppCompatActivity implements CustomerL
     public void onTimePicked(final String time) {
 
         mSelectedReservationTime = time;
+        mCreateReservationView.setSelectedTime(mSelectedReservationTime);
         showCreateReservationView();
     }
 
     @Override
     public void onCustomerClick(final String customerID) {
 
-        mSelectedCustomerID = customerID;
-        // TODO: 12/11/17 animation here
+        mReservationsPresenter.getCustomerByID(customerID);
+
         showCreateReservationView();
     }
 
     @Override
     public void onAcceptClicked() {
 
-        if (mSelectedCustomerID == null) {
+        if (mSelectedCustomer == null) {
             // TODO: 12/11/17 Show error dialog
         }
         if (mSelectedReservationTime == null) {

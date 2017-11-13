@@ -12,11 +12,8 @@ import android.widget.ListView;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.adapters.CustomerListAdapter;
-import com.eexposito.restaurant.presenter.CustomerPresenter;
-import com.eexposito.restaurant.presenter.DataCallback;
+import com.eexposito.restaurant.presenter.callbacks.ProgressCallback;
 import com.eexposito.restaurant.realm.models.Customer;
-
-import javax.inject.Inject;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EViewGroup;
@@ -25,7 +22,7 @@ import org.androidannotations.annotations.ViewById;
 import io.realm.RealmResults;
 
 @EViewGroup(R.layout.view_customer_list)
-public class CustomerListView extends FrameLayout implements DataCallback<Customer> {
+public class CustomerListView extends FrameLayout implements ProgressCallback<Customer> {
 
     public interface OnCustomerActionCallback {
 
