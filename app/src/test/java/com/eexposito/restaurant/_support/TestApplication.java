@@ -21,7 +21,7 @@ public class TestApplication extends MainApplication {
     }
 
     @Override
-    protected void initializeRealm() {
+    protected void initRealm() {
 
         // No Realm is initialized
     }

@@ -8,7 +8,7 @@ import io.realm.Realm;
 public class JUnitTestApplication extends MainApplication {
 
     @Override
-    protected void initializeRealm() {
+    protected void initRealm() {
 
         Realm.init(this);
         Realm.setDefaultConfiguration(TestRealmDefinitions.mConfiguration);

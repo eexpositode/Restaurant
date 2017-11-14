@@ -9,10 +9,12 @@ import com.eexposito.restaurant.retrofit.ReservationsServiceApi;
 import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import io.reactivex.Observable;
 import io.realm.Realm;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
 
 public class CustomerDataSource {
@@ -70,10 +72,15 @@ public class CustomerDataSource {
         } else {
             List<Customer> modelsToAdd = newCustomers.stream()
                     .filter(newCustomer ->
-                            !mModelManager.checkPredicate(allCustomers, customer ->
+                            !checkPredicate(allCustomers, customer ->
                                     newCustomer.getOrder() == customer.getOrder()))
                     .collect(Collectors.toList());
             mModelManager.saveModels(modelsToAdd);
         }
+    }
+
+    private <M extends RealmObject> boolean checkPredicate(@NonNull final List<M> models, @NonNull final Predicate<M> predicate) {
+
+        return models.stream().anyMatch(predicate);
     }
 }

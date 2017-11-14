@@ -1,5 +1,6 @@
 package com.eexposito.restaurant._support;
 
+import com.eexposito.restaurant.BuildConfig;
 import com.eexposito.restaurant._support.injections.components.TestApplicationComponent;
 import com.eexposito.restaurant._support.runners.CustomTestRunner;
 
@@ -10,7 +11,7 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 @RunWith(CustomTestRunner.class)
-@Config(manifest= "app/src/main/AndroidManifest.xml")
+@Config(constants = BuildConfig.class)
 @Ignore("No testing class")
 public class BaseTest {
 
@@ -18,12 +19,13 @@ public class BaseTest {
 
     @Before
     public void setUp() {
+
         mTestApplicationComponent = createApplicationComponent();
     }
 
     private TestApplicationComponent createApplicationComponent() {
+
         TestApplication application = (TestApplication) RuntimeEnvironment.application;
         return application.getApplicationComponent();
     }
-
 }

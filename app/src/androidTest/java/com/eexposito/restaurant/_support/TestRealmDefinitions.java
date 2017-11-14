@@ -8,11 +8,10 @@ import io.realm.RealmConfiguration;
 
 public class TestRealmDefinitions {
 
-    private static final String REALM_NAME = "com.exposito.test-reservations";
     public static final RealmConfiguration mConfiguration = new RealmConfiguration.Builder()
             .inMemory()
             .deleteRealmIfMigrationNeeded()
-            .name(REALM_NAME)
+            .name("com.exposito.test-reservations")
             .modules(new ReservationsModule(), new TestReservationsModule())
             .build();
 }

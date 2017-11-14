@@ -1,4 +1,4 @@
-package com.eexposito.restaurant._support;
+package com.eexposito.restaurant.realm;
 
 
 import android.support.test.runner.AndroidJUnit4;
@@ -29,19 +29,6 @@ public class RealmBaseTest {
 
         purgeRealm();
         mRealm.close();
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////
-    protected <M extends RealmObject> RealmResults<M> getAllOfType(final Realm realm, Class<M> realmClass) {
-
-        return realm.where(realmClass).findAll();
-    }
-
-    protected <M extends RealmObject> M saveModel(final Realm realm, M model) {
-
-        realm.executeTransaction(realm1 -> realm1.insertOrUpdate(model));
-        return model;
     }
 
     private void purgeRealm() {

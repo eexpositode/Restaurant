@@ -30,11 +30,6 @@ public class ModelManager {
         realm.close();
     }
 
-    public <M extends RealmObject> boolean checkPredicate(@NonNull final List<M> models, @NonNull final Predicate<M> predicate) {
-
-        return models.stream().anyMatch(predicate);
-    }
-
     public <M extends RealmObject> RealmResults<M> getModelByID(final Realm realm, final Class<M> modelClass, final String value) {
 
         return realm.where(modelClass).equalTo(Model.ID, value).findAll();

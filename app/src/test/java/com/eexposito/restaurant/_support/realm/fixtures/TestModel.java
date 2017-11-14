@@ -1,6 +1,7 @@
 package com.eexposito.restaurant._support.realm.fixtures;
 
 import com.eexposito.restaurant.realm.models.Model;
+import com.eexposito.restaurant.visitors.Visitor;
 
 import java.util.UUID;
 
@@ -31,5 +32,10 @@ public class TestModel extends RealmObject implements Model {
         } else {
             return this == obj;
         }
+    }
+
+    @Override
+    public void accept(final Visitor visitor) {
+
     }
 }
