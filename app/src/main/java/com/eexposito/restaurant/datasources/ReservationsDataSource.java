@@ -34,12 +34,12 @@ public class ReservationsDataSource {
 
     public Observable<RealmResults<Table>> getTableByID(final Realm realm, final String id) {
 
-        return Observable.just(mModelManager.getModelByField(realm, Table.class, Table.ID, id));
+        return Observable.just(mModelManager.getModelByID(realm, Table.class, id));
     }
 
     public Observable<RealmResults<Customer>> getCustomerByID(final Realm realm, final String id) {
 
-        return Observable.just(mModelManager.getModelByField(realm, Customer.class, Customer.ID, id));
+        return Observable.just(mModelManager.getModelByID(realm, Customer.class, id));
     }
 
     public <M extends RealmObject> M checkValidSingleData(final RealmResults<M> models)

@@ -69,10 +69,8 @@ public class ModelManagerBaseTest extends RealmBaseTest {
 
         RealmResults<TestModel> results = getAllOfType(mRealm, TestModel.class);
         assertThat(results, hasSize(models.size()));
-        results.forEach(result -> {
-            assertThat(models.stream().filter(model -> model.equals(result)).findAny(),
-                    notNullValue());
-        });
+        results.forEach(result -> assertThat(models.stream().filter(model -> model.equals(result)).findAny(),
+                notNullValue()));
     }
 
     @Test

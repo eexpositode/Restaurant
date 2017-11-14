@@ -1,5 +1,6 @@
 package com.eexposito.restaurant;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 
@@ -15,6 +16,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import io.realm.Realm;
 
+@SuppressLint("Registered")
 @EApplication
 public class MainApplication extends Application implements HasActivityInjector {
 

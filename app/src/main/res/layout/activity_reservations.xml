@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/traslucentBgColor"
+    android:background="@color/blue_grey_400"
     tools:context=".activities.RestaurantActivity_">
 
     <com.eexposito.restaurant.views.ResizableLayout

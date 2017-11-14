@@ -9,8 +9,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.eexposito.restaurant.R;
-import com.eexposito.restaurant.realm.models.Customer;
-import com.eexposito.restaurant.realm.models.Table;
 
 import java.util.Calendar;
 

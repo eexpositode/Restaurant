@@ -3,16 +3,13 @@ package com.eexposito.restaurant.views;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.eexposito.restaurant.R;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EViewGroup;
-import org.androidannotations.annotations.ViewById;
 
 @EViewGroup(R.layout.view_toolbar)
 public class ToolbarView extends FrameLayout {
@@ -23,9 +20,6 @@ public class ToolbarView extends FrameLayout {
 
         void onAcceptClicked();
     }
-
-    @ViewById(R.id.toolbar_text)
-    TextView mHeadLine;
 
     private OnToolbarActionCallback mCallback;
 
@@ -52,11 +46,6 @@ public class ToolbarView extends FrameLayout {
     public void bind(@NonNull final OnToolbarActionCallback callback) {
 
         mCallback = callback;
-    }
-
-    public void updateTitle(@NonNull @StringRes int headlineID) {
-
-        mHeadLine.setText(headlineID);
     }
 
     @Click(R.id.toolbar_accept)

@@ -73,12 +73,6 @@ public class TableGridView extends FrameLayout implements TableListContract.View
     }
 
     @Override
-    protected void onDetachedFromWindow() {
-
-        super.onDetachedFromWindow();
-    }
-
-    @Override
     public void onFetchDataStarted() {
         // Show progress dialog
         Toast.makeText(getContext(), "Fetch data started", Toast.LENGTH_LONG).show();

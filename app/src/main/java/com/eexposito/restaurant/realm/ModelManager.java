@@ -4,6 +4,7 @@ package com.eexposito.restaurant.realm;
 import android.support.annotation.NonNull;
 
 import com.eexposito.restaurant.realm.models.Customer;
+import com.eexposito.restaurant.realm.models.Model;
 import com.eexposito.restaurant.realm.models.Reservation;
 import com.eexposito.restaurant.realm.models.Table;
 
@@ -34,9 +35,9 @@ public class ModelManager {
         return models.stream().anyMatch(predicate);
     }
 
-    public <M extends RealmObject> RealmResults<M> getModelByField(final Realm realm, final Class<M> modelClass, final String field, final String value) {
+    public <M extends RealmObject> RealmResults<M> getModelByID(final Realm realm, final Class<M> modelClass, final String value) {
 
-        return realm.where(modelClass).equalTo(field, value).findAll();
+        return realm.where(modelClass).equalTo(Model.ID, value).findAll();
     }
 
     public void createReservation(@NonNull final String tableID, @NonNull final String customerID, @NonNull final String time) {
@@ -44,8 +45,8 @@ public class ModelManager {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(realm1 -> {
 
-            Table table = getModelByField(realm1, Table.class, Table.ID, tableID).first();
-            Customer customer = getModelByField(realm1, Customer.class, Customer.ID, customerID).first();
+            Table table = getModelByID(realm1, Table.class, tableID).first();
+            Customer customer = getModelByID(realm1, Customer.class, customerID).first();
             Reservation reservation = realm1.copyToRealm(new Reservation(customer, time));
             table.setReservation(reservation);
             realm1.insertOrUpdate(table);
@@ -58,10 +59,9 @@ public class ModelManager {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(realm1 -> {
 
-            RealmResults<Reservation> rows = getModelByField(
+            RealmResults<Reservation> rows = getModelByID(
                     realm1,
                     Reservation.class,
-                    Reservation.ID,
                     table.getReservation().getID());
             rows.deleteAllFromRealm();
             table.setReservation(null);
@@ -201,7 +201,7 @@ public class ModelManager {
     //        if (model.isManaged()) {
     //            return model;
     //        } else {
-    //            RealmResults<M> models = getModelByField(realm, modelClass, field, value);
+    //            RealmResults<M> models = getModelByID(realm, modelClass, field, value);
     //            M managedModel = models.stream()
     //                    .findAny()
     //                    .orElse(null);
@@ -214,7 +214,7 @@ public class ModelManager {
     //        }
     //    }
     //
-    //    private <M extends RealmObject> RealmResults<M> getModelByField(final Realm realm, final Class<M> modelClass, final String field, final String value) {
+    //    private <M extends RealmObject> RealmResults<M> getModelByID(final Realm realm, final Class<M> modelClass, final String field, final String value) {
     //
     //        return realm.where(modelClass).equalTo(field, value).findAll();
     //    }

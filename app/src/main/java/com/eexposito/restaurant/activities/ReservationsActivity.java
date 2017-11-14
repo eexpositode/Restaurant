@@ -91,7 +91,6 @@ public class ReservationsActivity extends AppCompatActivity implements
     public void init() {
 
         // Set up toolbar
-        mToolbarView.updateTitle(R.string.reservations_create_reservation);
         mToolbarView.bind(this);
 
         showCreateReservationView();

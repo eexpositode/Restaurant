@@ -1,35 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="@dimen/default_headline_height"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical"
+        android:paddingEnd="@dimen/default_padding"
+        android:paddingStart="@dimen/default_padding"
+        android:text="@string/headline_table_grid"
+        android:textColor="@color/white"
+        android:textSize="@dimen/default_headline_text_size"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/default_headline_height"
-            android:paddingStart="@dimen/default_padding"
-            android:paddingEnd="@dimen/default_padding"
-            android:background="@color/colorPrimary"
-            android:gravity="center_vertical"
-            android:text="@string/headline_table_grid"
-            android:textColor="@color/white"
-            android:textSize="@dimen/default_headline_text_size"/>
-
-        <GridView
-            android:id="@+id/table_grid_grid_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/default_padding"
-            android:layout_weight="1"
-            android:columnWidth="@dimen/default_grid_column_width"
-            android:gravity="center"
-            android:horizontalSpacing="@dimen/default_padding"
-            android:numColumns="4"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="@dimen/default_padding"/>
-    </LinearLayout>
-</FrameLayout>
+    <GridView
+        android:id="@+id/table_grid_grid_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/default_padding"
+        android:layout_weight="1"
+        android:columnWidth="@dimen/default_grid_column_width"
+        android:gravity="center"
+        android:horizontalSpacing="@dimen/default_padding"
+        android:numColumns="4"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="@dimen/default_padding"/>
+</LinearLayout>
