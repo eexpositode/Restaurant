@@ -1,9 +1,5 @@
-package com.eexposito.restaurant.injections.modules;
+package com.eexposito.restaurant.injections;
 
-import com.eexposito.restaurant.activities.ReservationsActivity;
-import com.eexposito.restaurant.datasources.ReservationsDataSource;
-import com.eexposito.restaurant.presenter.ReservationsPresenter;
-import com.eexposito.restaurant.presenter.ReservationsPresenterImpl;
 import com.eexposito.restaurant.realm.ModelManager;
 import com.eexposito.restaurant.realm.RealmService;
 import com.eexposito.restaurant.retrofit.ReservationsServiceApi;
@@ -54,24 +50,6 @@ public class ApplicationModule {
     public ModelManager provideModelManager() {
 
         return new ModelManager();
-    }
-
-    @Provides
-    public ReservationsDataSource provideReservationsDataSource(ModelManager modelManager) {
-
-        return new ReservationsDataSource(modelManager);
-    }
-
-    /**
-     * Presenter for {@link ReservationsActivity}
-     *
-     * @param dataSource
-     * @return
-     */
-    @Provides
-    public ReservationsPresenter provideReservationsPresenter(ReservationsDataSource dataSource) {
-
-        return new ReservationsPresenterImpl(dataSource);
     }
 
     /* OkHttpclient for retrofit2 */

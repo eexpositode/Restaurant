@@ -31,7 +31,7 @@ repositories {
 def AAVersion = '4.4.0'
 dependencies {
     annotationProcessor "org.androidannotations:androidannotations:$AAVersion"
-    compile "org.androidannotations:androidannotations-api:$AAVersion"
+    implementation "org.androidannotations:androidannotations-api:$AAVersion"
 }
 
 dependencies {

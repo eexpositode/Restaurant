@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.eexposito.restaurant._support.TestApplication;
 import com.eexposito.restaurant._support.injections.modules.TestApplicationModule;
-import com.eexposito.restaurant.injections.components.ApplicationComponent;
+import com.eexposito.restaurant.injections.ApplicationComponent;
 
 import javax.inject.Singleton;
 

@@ -1,10 +1,8 @@
-package com.eexposito.restaurant.injections.components;
+package com.eexposito.restaurant.injections;
 
 import android.app.Application;
 
 import com.eexposito.restaurant.MainApplication;
-import com.eexposito.restaurant.injections.contributors.ActivityBuilder;
-import com.eexposito.restaurant.injections.modules.ApplicationModule;
 
 import javax.inject.Singleton;
 
@@ -16,7 +14,8 @@ import dagger.android.AndroidInjectionModule;
 @Component(modules = {
         AndroidInjectionModule.class,
         ApplicationModule.class,
-        ActivityBuilder.class})
+        ActivityModule.class,
+        PresentersModule.class})
 public interface ApplicationComponent {
 
     @Component.Builder

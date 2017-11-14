@@ -7,6 +7,8 @@ public interface Presenter {
 
     void bind(final BaseCallback view);
 
+    void loadDataOnBind();
+
     void unBind();
 
     boolean isViewBound();

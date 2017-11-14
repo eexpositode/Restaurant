@@ -1,17 +1,13 @@
 package com.eexposito.restaurant.activities;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.presenter.ReservationsPresenter;
 import com.eexposito.restaurant.presenter.TablePresenter;
-import com.eexposito.restaurant.realm.models.Customer;
 import com.eexposito.restaurant.realm.models.Table;
 import com.eexposito.restaurant.views.CustomDialog;
 import com.eexposito.restaurant.views.TableGridView;

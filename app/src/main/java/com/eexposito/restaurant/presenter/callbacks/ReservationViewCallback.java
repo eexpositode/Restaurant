@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import com.eexposito.restaurant.realm.models.Customer;
 import com.eexposito.restaurant.realm.models.Table;
 
-public interface ReservationsCallback extends BaseCallback {
+public interface ReservationViewCallback extends BaseCallback {
 
     void onFetchTableByID(@NonNull final Table table);
 

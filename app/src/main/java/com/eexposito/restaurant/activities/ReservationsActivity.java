@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.presenter.CustomerPresenter;
 import com.eexposito.restaurant.presenter.ReservationsPresenter;
-import com.eexposito.restaurant.presenter.callbacks.ReservationsCallback;
+import com.eexposito.restaurant.presenter.callbacks.ReservationViewCallback;
 import com.eexposito.restaurant.realm.models.Customer;
 import com.eexposito.restaurant.realm.models.Table;
 import com.eexposito.restaurant.views.CreateReservationView;
@@ -29,9 +29,10 @@ import dagger.android.AndroidInjection;
 
 @EActivity(R.layout.activity_reservations)
 public class ReservationsActivity extends AppCompatActivity implements
-        ReservationsCallback,
+        ReservationViewCallback,
         CustomerListView.OnCustomerActionCallback,
-        ToolbarView.OnToolbarActionCallback, CreateReservationView.OnCreateReservationActionCallback {
+        ToolbarView.OnToolbarActionCallback,
+        CreateReservationView.OnCreateReservationActionCallback {
 
     public static final String RESERVATIONS_TABLE_ID = "SELECTED_TABLE";
     public static final String RESERVATIONS_CUSTOMER_ID = "SELECTED_CUSTOMER";
@@ -75,6 +76,7 @@ public class ReservationsActivity extends AppCompatActivity implements
         String selectedTableID = intent.getStringExtra(RestaurantActivity.TABLE_ID);
         if (selectedTableID == null) {
             finishWithError(getString(R.string.reservations_no_table_selected));
+            return;
         }
 
         mReservationsPresenter.bind(this);
@@ -94,14 +96,14 @@ public class ReservationsActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
 
-        mCustomerPresenter.unBind();
+        mReservationsPresenter.unBind();
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
 
-        mCustomerPresenter.onDestroy();
+        mReservationsPresenter.onDestroy();
         super.onDestroy();
     }
 
@@ -168,6 +170,14 @@ public class ReservationsActivity extends AppCompatActivity implements
     public void onSelectCustomerClicked() {
 
         showCustomerList();
+    }
+
+    // TODO: 14/11/17 Dont do this
+    @Override
+    public void onDetachFromView() {
+
+        mCustomerPresenter.unBind();
+        mCustomerPresenter.onDestroy();
     }
 
     @Override
