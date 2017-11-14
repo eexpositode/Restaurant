@@ -4,25 +4,34 @@ package com.eexposito.restaurant.presenter;
 import android.support.annotation.NonNull;
 
 import com.eexposito.restaurant.datasources.ReservationsDataSource;
-import com.eexposito.restaurant.presenter.callbacks.ReservationViewCallback;
+import com.eexposito.restaurant.presenter.contracts.ReservationsContract;
 import com.eexposito.restaurant.realm.models.Customer;
 import com.eexposito.restaurant.realm.models.Table;
 import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
 
-public class ReservationsPresenter extends BasePresenter<ReservationViewCallback> {
+import java.lang.ref.WeakReference;
 
+import io.realm.Realm;
+
+public class ReservationsPresenterImpl implements ReservationsContract.ReservationsPresenter {
+
+    private Realm mRealm;
+    private WeakReference<ReservationsContract.View> mViewWeakReference;
     private ReservationsDataSource mDataSource;
 
-    public ReservationsPresenter(@NonNull final ReservationsDataSource dataSource) {
+    public ReservationsPresenterImpl(@NonNull final ReservationsDataSource dataSource) {
 
         mDataSource = dataSource;
     }
 
     @Override
-    public void loadDataOnBind() {
-        //Do nothing
+    public void bind(final ReservationsContract.View view) {
+
+        mRealm = Realm.getDefaultInstance();
+        mViewWeakReference = new WeakReference<>(view);
     }
 
+    @Override
     public void getTableFromID(@NonNull final String id) {
 
         mDataSource.getTableByID(mRealm, id)
@@ -37,6 +46,7 @@ public class ReservationsPresenter extends BasePresenter<ReservationViewCallback
                         error -> mViewWeakReference.get().onFetchDataError(error));
     }
 
+    @Override
     public void getCustomerByID(@NonNull final String id) {
 
         mDataSource.getCustomerByID(mRealm, id)
@@ -51,13 +61,33 @@ public class ReservationsPresenter extends BasePresenter<ReservationViewCallback
                         error -> mViewWeakReference.get().onFetchDataError(error));
     }
 
+    @Override
     public void createReservation(@NonNull final String tableID, @NonNull final String customerID, @NonNull final String time) {
 
         mDataSource.createReservation(tableID, customerID, time);
     }
 
+    @Override
     public void removeReservation(@NonNull final Table table) {
 
         mDataSource.removeReservation(table);
+    }
+
+    @Override
+    public boolean isViewBound() {
+
+        return mViewWeakReference != null && mViewWeakReference.get() != null;
+    }
+
+    @Override
+    public void unBind() {
+
+        mViewWeakReference = null;
+    }
+
+    @Override
+    public void clear() {
+
+        mRealm.close();
     }
 }

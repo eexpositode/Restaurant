@@ -5,14 +5,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.adapters.CustomerListAdapter;
-import com.eexposito.restaurant.presenter.callbacks.ProgressViewCallback;
+import com.eexposito.restaurant.presenter.contracts.CustomerListContract;
 import com.eexposito.restaurant.realm.models.Customer;
 
 import org.androidannotations.annotations.AfterViews;
@@ -22,13 +20,13 @@ import org.androidannotations.annotations.ViewById;
 import io.realm.RealmResults;
 
 @EViewGroup(R.layout.view_customer_list)
-public class CustomerListView extends FrameLayout implements ProgressViewCallback<Customer> {
+public class CustomerListView extends FrameLayout implements CustomerListContract.View {
 
     public interface OnCustomerActionCallback {
 
         void onCustomerClick(final String customerID);
 
-        void onDetachFromView();
+        void onCustomerViewDetachedFromWindow();
     }
 
     @ViewById(R.id.customer_list_list_view)
@@ -61,14 +59,11 @@ public class CustomerListView extends FrameLayout implements ProgressViewCallbac
     @AfterViews
     public void init() {
 
-        mCustomerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mCustomerListView.setOnItemClickListener((parent, view, position, id) -> {
 
-            @Override
-            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-
-                if (mCallback != null) {
-                    mCallback.onCustomerClick(mCustomerListAdapter.getItem(position).getID());
-                }
+            Customer item = mCustomerListAdapter.getItem(position);
+            if (item != null && mCallback != null) {
+                mCallback.onCustomerClick(item.getID());
             }
         });
     }
@@ -84,7 +79,7 @@ public class CustomerListView extends FrameLayout implements ProgressViewCallbac
     protected void onDetachedFromWindow() {
 
         if (mCallback != null) {
-            mCallback.onDetachFromView();
+            mCallback.onCustomerViewDetachedFromWindow();
         }
         super.onDetachedFromWindow();
     }

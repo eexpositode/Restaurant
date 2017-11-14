@@ -4,16 +4,30 @@ package com.eexposito.restaurant.presenter;
 import android.support.annotation.NonNull;
 
 import com.eexposito.restaurant.datasources.TableDataSource;
-import com.eexposito.restaurant.presenter.callbacks.ProgressViewCallback;
+import com.eexposito.restaurant.presenter.contracts.TableListContract;
 import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
 
-public class TablePresenter extends BasePresenter<ProgressViewCallback> {
+import java.lang.ref.WeakReference;
 
+import io.realm.Realm;
+
+public class TablePresenterImpl implements TableListContract.TablePresenter {
+
+    private Realm mRealm;
+    private WeakReference<TableListContract.View> mViewWeakReference;
     private TableDataSource mTableDataSource;
 
-    public TablePresenter(@NonNull TableDataSource tableDataSource) {
+    public TablePresenterImpl(@NonNull TableDataSource tableDataSource) {
 
         mTableDataSource = tableDataSource;
+    }
+
+    @Override
+    public void bind(final TableListContract.View view) {
+
+        mRealm = Realm.getDefaultInstance();
+        mViewWeakReference = new WeakReference<>(view);
+        loadDataOnBind();
     }
 
     @Override
@@ -42,5 +56,23 @@ public class TablePresenter extends BasePresenter<ProgressViewCallback> {
                             mViewWeakReference.get().onFetchDataCompleted();
                         }
                 );
+    }
+
+    @Override
+    public boolean isViewBound() {
+
+        return mViewWeakReference != null && mViewWeakReference.get() != null;
+    }
+
+    @Override
+    public void unBind() {
+
+        mViewWeakReference = null;
+    }
+
+    @Override
+    public void clear() {
+
+        mRealm.close();
     }
 }

@@ -1,5 +1,6 @@
 package com.eexposito.restaurant.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +11,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.eexposito.restaurant.R;
-import com.eexposito.restaurant.presenter.CustomerPresenter;
-import com.eexposito.restaurant.presenter.ReservationsPresenter;
-import com.eexposito.restaurant.presenter.callbacks.ReservationViewCallback;
+import com.eexposito.restaurant.presenter.CustomerPresenterImpl;
+import com.eexposito.restaurant.presenter.ReservationsPresenterImpl;
+import com.eexposito.restaurant.presenter.contracts.ReservationsContract;
 import com.eexposito.restaurant.realm.models.Customer;
 import com.eexposito.restaurant.realm.models.Table;
 import com.eexposito.restaurant.views.CreateReservationView;
@@ -27,9 +28,10 @@ import org.androidannotations.annotations.ViewById;
 
 import dagger.android.AndroidInjection;
 
+@SuppressLint("Registered")
 @EActivity(R.layout.activity_reservations)
 public class ReservationsActivity extends AppCompatActivity implements
-        ReservationViewCallback,
+        ReservationsContract.View,
         CustomerListView.OnCustomerActionCallback,
         ToolbarView.OnToolbarActionCallback,
         CreateReservationView.OnCreateReservationActionCallback {
@@ -37,12 +39,13 @@ public class ReservationsActivity extends AppCompatActivity implements
     public static final String RESERVATIONS_TABLE_ID = "SELECTED_TABLE";
     public static final String RESERVATIONS_CUSTOMER_ID = "SELECTED_CUSTOMER";
     public static final String RESERVATIONS_TIME = "SELECTED_TIME";
+    public static final String RESERVATIONS_ERR_MSG = "ERROR_MSG";
 
     @Inject
-    ReservationsPresenter mReservationsPresenter;
+    ReservationsPresenterImpl mReservationsPresenterImpl;
 
     @Inject
-    CustomerPresenter mCustomerPresenter;
+    CustomerPresenterImpl mCustomerPresenterImpl;
 
     @ViewById(R.id.reservations_dialog_view)
     View mDialogView;
@@ -79,8 +82,8 @@ public class ReservationsActivity extends AppCompatActivity implements
             return;
         }
 
-        mReservationsPresenter.bind(this);
-        mReservationsPresenter.getTableFromID(selectedTableID);
+        mReservationsPresenterImpl.bind(this);
+        mReservationsPresenterImpl.getTableFromID(selectedTableID);
     }
 
     @AfterViews
@@ -96,14 +99,14 @@ public class ReservationsActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
 
-        mReservationsPresenter.unBind();
+        mReservationsPresenterImpl.unBind();
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
 
-        mReservationsPresenter.onDestroy();
+        mReservationsPresenterImpl.clear();
         super.onDestroy();
     }
 
@@ -117,8 +120,8 @@ public class ReservationsActivity extends AppCompatActivity implements
     // TODO: 12/11/17 any animation here
     private void showCustomerList() {
 
-        if (!mCustomerPresenter.isViewBound()) {
-            mCustomerPresenter.bind(mCustomerListView);
+        if (!mCustomerPresenterImpl.isViewBound()) {
+            mCustomerPresenterImpl.bind(mCustomerListView);
         }
         mCustomerListView.bind(this);
         mCustomerListView.setVisibility(View.VISIBLE);
@@ -128,6 +131,7 @@ public class ReservationsActivity extends AppCompatActivity implements
     private void finishWithError(final String errorMsg) {
 
         Intent returnIntent = new Intent();
+        returnIntent.putExtra(RESERVATIONS_ERR_MSG, errorMsg);
         setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
     }
@@ -137,7 +141,7 @@ public class ReservationsActivity extends AppCompatActivity implements
         Toast.makeText(this, error, Toast.LENGTH_LONG).show();
     }
     /////////////////////////////////////////////////////////////////////////////////
-    // Reservations presenter callbacks
+    // Reservations presenter view
     /////////////////////////////////////////////////////////////////////////////////
 
     @Override
@@ -165,19 +169,12 @@ public class ReservationsActivity extends AppCompatActivity implements
     }
 
     /////////////////////////////////////////////////////////////////////////////////
+    // CreateReservationView
     /////////////////////////////////////////////////////////////////////////////////
     @Override
     public void onSelectCustomerClicked() {
 
         showCustomerList();
-    }
-
-    // TODO: 14/11/17 Dont do this
-    @Override
-    public void onDetachFromView() {
-
-        mCustomerPresenter.unBind();
-        mCustomerPresenter.onDestroy();
     }
 
     @Override
@@ -188,14 +185,27 @@ public class ReservationsActivity extends AppCompatActivity implements
         showCreateReservationView();
     }
 
+    /////////////////////////////////////////////////////////////////////////////////
+    // CustomerListView
+    /////////////////////////////////////////////////////////////////////////////////
     @Override
     public void onCustomerClick(final String customerID) {
 
-        mReservationsPresenter.getCustomerByID(customerID);
+        mReservationsPresenterImpl.getCustomerByID(customerID);
 
         showCreateReservationView();
     }
 
+    @Override
+    public void onCustomerViewDetachedFromWindow() {
+
+        mCustomerPresenterImpl.unBind();
+        mCustomerPresenterImpl.clear();
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////
+    // Toolbar
+    /////////////////////////////////////////////////////////////////////////////////
     @Override
     public void onAcceptClicked() {
 

@@ -35,7 +35,7 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-public class CustomerPresenterTest extends BaseTest {
+public class CustomerPresenterImplTest extends BaseTest {
 
     @Mock
     RealmService mService;
@@ -50,7 +50,7 @@ public class CustomerPresenterTest extends BaseTest {
     private TestCustomerView mView;
 
     @InjectMocks
-    private CustomerPresenter mPresenter;
+    private CustomerPresenterImpl mPresenter;
 
     @Before
     public void setUp() {
