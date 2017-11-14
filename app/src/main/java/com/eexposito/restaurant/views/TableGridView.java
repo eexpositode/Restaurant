@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.adapters.TableGridAdapter;
-import com.eexposito.restaurant.presenter.callbacks.ProgressCallback;
+import com.eexposito.restaurant.presenter.callbacks.ProgressViewCallback;
 import com.eexposito.restaurant.realm.models.Table;
 
 import org.androidannotations.annotations.AfterViews;
@@ -20,7 +20,7 @@ import org.androidannotations.annotations.ViewById;
 import io.realm.RealmResults;
 
 @EViewGroup(R.layout.view_table_grid)
-public class TableGridView extends FrameLayout implements ProgressCallback<Table> {
+public class TableGridView extends FrameLayout implements ProgressViewCallback<Table> {
 
     public interface OnTableActionCallback {
 

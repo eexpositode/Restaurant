@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.adapters.CustomerListAdapter;
-import com.eexposito.restaurant.presenter.callbacks.ProgressCallback;
+import com.eexposito.restaurant.presenter.callbacks.ProgressViewCallback;
 import com.eexposito.restaurant.realm.models.Customer;
 
 import org.androidannotations.annotations.AfterViews;
@@ -22,11 +22,13 @@ import org.androidannotations.annotations.ViewById;
 import io.realm.RealmResults;
 
 @EViewGroup(R.layout.view_customer_list)
-public class CustomerListView extends FrameLayout implements ProgressCallback<Customer> {
+public class CustomerListView extends FrameLayout implements ProgressViewCallback<Customer> {
 
     public interface OnCustomerActionCallback {
 
         void onCustomerClick(final String customerID);
+
+        void onDetachFromView();
     }
 
     @ViewById(R.id.customer_list_list_view)
@@ -63,8 +65,10 @@ public class CustomerListView extends FrameLayout implements ProgressCallback<Cu
 
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-                if (mCallback != null)
+
+                if (mCallback != null) {
                     mCallback.onCustomerClick(mCustomerListAdapter.getItem(position).getID());
+                }
             }
         });
     }
@@ -79,6 +83,9 @@ public class CustomerListView extends FrameLayout implements ProgressCallback<Cu
     @Override
     protected void onDetachedFromWindow() {
 
+        if (mCallback != null) {
+            mCallback.onDetachFromView();
+        }
         super.onDetachedFromWindow();
     }
 

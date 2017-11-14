@@ -3,8 +3,8 @@ package com.eexposito.restaurant;
 import android.app.Activity;
 import android.app.Application;
 
-import com.eexposito.restaurant.injections.components.ApplicationComponent;
-import com.eexposito.restaurant.injections.components.DaggerApplicationComponent;
+import com.eexposito.restaurant.injections.ApplicationComponent;
+import com.eexposito.restaurant.injections.DaggerApplicationComponent;
 import com.eexposito.restaurant.realm.RealmDefinitions;
 
 import javax.inject.Inject;
