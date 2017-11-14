@@ -1,5 +1,7 @@
 package com.eexposito.restaurant.realm.models;
 
+import com.eexposito.restaurant.visitors.Visitor;
+
 import java.util.UUID;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -51,7 +53,7 @@ public class Reservation extends RealmObject implements Model {
         mCustomer = customer;
     }
 
-    public String getDateTime() {
+    public String getTime() {
 
         return mDateTime;
     }
@@ -78,5 +80,13 @@ public class Reservation extends RealmObject implements Model {
                 .append(mDateTime, reservation.mDateTime)
                 .append(mCustomer, reservation.mCustomer)
                 .isEquals();
+    }
+    //////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////
+
+    @Override
+    public void accept(final Visitor visitor) {
+
+        visitor.visit(this);
     }
 }

@@ -1,5 +1,7 @@
 package com.eexposito.restaurant.realm.models;
 
+import com.eexposito.restaurant.visitors.Visitor;
+
 import java.util.UUID;
 
 import io.realm.RealmObject;
@@ -63,5 +65,13 @@ public class Table extends RealmObject implements Model {
         } else {
             return this == obj;
         }
+    }
+    //////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////
+
+    @Override
+    public void accept(final Visitor visitor) {
+
+        visitor.visit(this);
     }
 }

@@ -9,7 +9,6 @@
     <string name="reservations_on_fetch_data_err">Error while fetching data: %s</string>
     <string name="reservations_select_customer_err">Please, select a customer</string>
 
-    <string name="customer_formatted_name">%s. %s, %s</string>
     <string name="reservations_no_table_selected">No table was selected or wrong table id was found.</string>
     <string name="reservations_select_time_err">Please, select a timer for the reservation</string>
 

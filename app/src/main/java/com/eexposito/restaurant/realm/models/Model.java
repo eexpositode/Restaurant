@@ -1,7 +1,9 @@
 package com.eexposito.restaurant.realm.models;
 
 
-public interface Model {
+import com.eexposito.restaurant.visitors.Visitable;
+
+public interface Model extends Visitable {
 
     String ID = "mID";
 

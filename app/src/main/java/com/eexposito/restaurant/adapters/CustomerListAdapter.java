@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.realm.models.Customer;
+import com.eexposito.restaurant.visitors.ExtendedPrintVisitor;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
@@ -44,9 +45,9 @@ public class CustomerListAdapter extends RealmBaseAdapter<Customer> implements L
 
     private void setCustomerName(final CustomerViewHolder viewHolder, final Customer customer) {
 
-        String formattedName =
-                viewHolder.mNameTextView.getContext().getString(R.string.customer_formatted_name, String.valueOf(customer.getOrder() + 1), customer.getLastName(), customer.getFirstName());
-        viewHolder.mNameTextView.setText(formattedName);
+        ExtendedPrintVisitor visitor = new ExtendedPrintVisitor();
+        customer.accept(visitor);
+        viewHolder.mNameTextView.setText(visitor.getModelToString());
     }
 
     private class CustomerViewHolder {

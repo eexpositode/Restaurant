@@ -1,5 +1,6 @@
 package com.eexposito.restaurant.realm.models;
 
+import com.eexposito.restaurant.visitors.Visitor;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -37,6 +38,7 @@ public class Customer extends RealmObject implements Model {
     private String mLastName;
 
     public Customer() {
+
         super();
     }
 
@@ -59,26 +61,32 @@ public class Customer extends RealmObject implements Model {
     }
 
     public String getFirstName() {
+
         return mFirstName;
     }
 
     public void setFirstName(String firstName) {
+
         this.mFirstName = firstName;
     }
 
     public String getLastName() {
+
         return mLastName;
     }
 
     public void setLastName(String lastName) {
+
         this.mLastName = lastName;
     }
 
     public int getOrder() {
+
         return mOrder;
     }
 
     public void setOrder(Integer order) {
+
         this.mOrder = order;
     }
 
@@ -101,5 +109,13 @@ public class Customer extends RealmObject implements Model {
                 .append(mFirstName, customer.mFirstName)
                 .append(mLastName, customer.mLastName)
                 .isEquals();
+    }
+    //////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////
+
+    @Override
+    public void accept(final Visitor visitor) {
+
+        visitor.visit(this);
     }
 }

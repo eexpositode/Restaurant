@@ -2,7 +2,6 @@ package com.eexposito.restaurant.retrofit;
 
 
 import com.eexposito.restaurant.realm.models.Customer;
-import com.eexposito.restaurant.realm.models.TableReservationList;
 
 import java.util.List;
 

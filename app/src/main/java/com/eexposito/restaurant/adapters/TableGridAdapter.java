@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.realm.models.Customer;
+import com.eexposito.restaurant.realm.models.Reservation;
 import com.eexposito.restaurant.realm.models.Table;
+import com.eexposito.restaurant.visitors.PrintModelVisitor;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
@@ -51,11 +53,14 @@ public class TableGridAdapter extends RealmBaseAdapter<Table> {
 
     private void setTime(final TableViewHolder viewHolder, final Table table) {
 
-        if (table.getReservation() == null) {
+        Reservation reservation = table.getReservation();
+        if (reservation == null) {
             viewHolder.mTimeTextView.setText("");
             viewHolder.mTimeTextView.setVisibility(View.GONE);
         } else {
-            viewHolder.mTimeTextView.setText(table.getReservation().getDateTime());
+            PrintModelVisitor visitor = new PrintModelVisitor();
+            reservation.accept(visitor);
+            viewHolder.mTimeTextView.setText(visitor.getModelToString());
             viewHolder.mTimeTextView.setVisibility(View.VISIBLE);
         }
     }
@@ -67,7 +72,9 @@ public class TableGridAdapter extends RealmBaseAdapter<Table> {
             viewHolder.mTimeTextView.setVisibility(View.GONE);
         } else {
             Customer customer = table.getReservation().getCustomer();
-            viewHolder.mCustomerNameTextView.setText(customer.getLastName() + ", " + customer.getFirstName());
+            PrintModelVisitor visitor = new PrintModelVisitor();
+            customer.accept(visitor);
+            viewHolder.mCustomerNameTextView.setText(visitor.getModelToString());
             viewHolder.mTimeTextView.setVisibility(View.VISIBLE);
         }
     }
@@ -93,7 +100,9 @@ public class TableGridAdapter extends RealmBaseAdapter<Table> {
 
     private void setTableName(final TableViewHolder viewHolder, final Table table) {
 
-        viewHolder.mNameTextView.setText("Table " + table.getOrder());
+        PrintModelVisitor visitor = new PrintModelVisitor();
+        table.accept(visitor);
+        viewHolder.mNameTextView.setText(visitor.getModelToString());
     }
 
     private class TableViewHolder {

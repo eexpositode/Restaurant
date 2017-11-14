@@ -19,6 +19,7 @@ import com.eexposito.restaurant.realm.models.Table;
 import com.eexposito.restaurant.views.CreateReservationView;
 import com.eexposito.restaurant.views.CustomerListView;
 import com.eexposito.restaurant.views.ToolbarView;
+import com.eexposito.restaurant.visitors.PrintModelVisitor;
 
 import javax.inject.Inject;
 
@@ -154,18 +155,18 @@ public class ReservationsActivity extends AppCompatActivity implements
     public void onFetchTableByID(@NonNull final Table table) {
 
         mSelectedTable = table;
-        mCreateReservationView.setSelectedTable("Table " + table.getOrder());
+        PrintModelVisitor visitor = new PrintModelVisitor();
+        mSelectedTable.accept(visitor);
+        mCreateReservationView.setSelectedTable(visitor.getModelToString());
     }
 
     @Override
     public void onFetchCustomerByID(@NonNull final Customer customer) {
 
         mSelectedCustomer = customer;
-        mCreateReservationView.setSelectedCustomer(
-                getString(R.string.customer_formatted_name,
-                        String.valueOf(customer.getOrder() + 1),
-                        customer.getLastName(),
-                        customer.getFirstName()));
+        PrintModelVisitor visitor = new PrintModelVisitor();
+        mSelectedCustomer.accept(visitor);
+        mCreateReservationView.setSelectedCustomer(visitor.getModelToString());
     }
 
     /////////////////////////////////////////////////////////////////////////////////
