@@ -1,13 +1,14 @@
 package com.eexposito.restaurant.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.eexposito.restaurant.R;
-import com.eexposito.restaurant.presenter.ReservationsPresenter;
-import com.eexposito.restaurant.presenter.TablePresenter;
+import com.eexposito.restaurant.presenter.ReservationsPresenterImpl;
+import com.eexposito.restaurant.presenter.TablePresenterImpl;
 import com.eexposito.restaurant.realm.models.Table;
 import com.eexposito.restaurant.views.CustomDialog;
 import com.eexposito.restaurant.views.TableGridView;
@@ -20,6 +21,7 @@ import org.androidannotations.annotations.ViewById;
 
 import dagger.android.AndroidInjection;
 
+@SuppressLint("Registered")
 @EActivity(R.layout.activity_restaurant)
 public class RestaurantActivity extends AppCompatActivity implements TableGridView.OnTableActionCallback {
 
@@ -27,10 +29,10 @@ public class RestaurantActivity extends AppCompatActivity implements TableGridVi
     public static final int CREATE_RESERVATION_REQ_CODE = 1001;
 
     @Inject
-    TablePresenter mTablePresenter;
+    TablePresenterImpl mTablePresenterImpl;
 
     @Inject
-    ReservationsPresenter mReservationsPresenter;
+    ReservationsPresenterImpl mReservationsPresenterImpl;
 
     @ViewById(R.id.restaurant_table_grid)
     TableGridView mTableGridView;
@@ -46,7 +48,7 @@ public class RestaurantActivity extends AppCompatActivity implements TableGridVi
     public void afterViews() {
 
         mTableGridView.bind(this);
-        mTablePresenter.bind(mTableGridView);
+        mTablePresenterImpl.bind(mTableGridView);
     }
 
     @Override
@@ -58,26 +60,33 @@ public class RestaurantActivity extends AppCompatActivity implements TableGridVi
                 createReservation(data.getStringExtra(ReservationsActivity.RESERVATIONS_TABLE_ID),
                         data.getStringExtra(ReservationsActivity.RESERVATIONS_CUSTOMER_ID),
                         data.getStringExtra(ReservationsActivity.RESERVATIONS_TIME));
+            } else {
+                String error = data.getStringExtra(ReservationsActivity.RESERVATIONS_ERR_MSG);
+                if (error != null) {
+                    CustomDialog.showAlertDialog(this,
+                            error,
+                            (dialog, which) -> dialog.dismiss());
+                }
             }
         }
     }
 
     private void createReservation(final String tableID, final String customerID, final String time) {
 
-        mReservationsPresenter.createReservation(tableID, customerID, time);
+        mReservationsPresenterImpl.createReservation(tableID, customerID, time);
     }
 
     @Override
     protected void onPause() {
 
-        mTablePresenter.unBind();
+        mTablePresenterImpl.unBind();
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
 
-        mTablePresenter.onDestroy();
+        mTablePresenterImpl.clear();
         super.onDestroy();
     }
 
@@ -91,7 +100,7 @@ public class RestaurantActivity extends AppCompatActivity implements TableGridVi
         } else {
             CustomDialog.showAlertDialog(this,
                     getString(R.string.restaurant_remove_reservation),
-                    (dialog, which) -> mReservationsPresenter.removeReservation(table),
+                    (dialog, which) -> mReservationsPresenterImpl.removeReservation(table),
                     (dialog, which) -> dialog.dismiss());
         }
     }

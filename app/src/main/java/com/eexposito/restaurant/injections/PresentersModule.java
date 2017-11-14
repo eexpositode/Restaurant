@@ -5,9 +5,9 @@ import com.eexposito.restaurant.activities.ReservationsActivity;
 import com.eexposito.restaurant.datasources.CustomerDataSource;
 import com.eexposito.restaurant.datasources.ReservationsDataSource;
 import com.eexposito.restaurant.datasources.TableDataSource;
-import com.eexposito.restaurant.presenter.CustomerPresenter;
-import com.eexposito.restaurant.presenter.ReservationsPresenter;
-import com.eexposito.restaurant.presenter.TablePresenter;
+import com.eexposito.restaurant.presenter.CustomerPresenterImpl;
+import com.eexposito.restaurant.presenter.ReservationsPresenterImpl;
+import com.eexposito.restaurant.presenter.TablePresenterImpl;
 import com.eexposito.restaurant.realm.ModelManager;
 import com.eexposito.restaurant.retrofit.ReservationsServiceApi;
 
@@ -31,9 +31,9 @@ public class PresentersModule {
      * @return
      */
     @Provides
-    public CustomerPresenter provideCustomerPresenter(CustomerDataSource dataSource) {
+    public CustomerPresenterImpl provideCustomerPresenter(CustomerDataSource dataSource) {
 
-        return new CustomerPresenter(dataSource);
+        return new CustomerPresenterImpl(dataSource);
     }
 
     @Provides
@@ -44,9 +44,9 @@ public class PresentersModule {
     }
 
     @Provides
-    public TablePresenter provideTablePresenter(TableDataSource dataSource) {
+    public TablePresenterImpl provideTablePresenter(TableDataSource dataSource) {
 
-        return new TablePresenter(dataSource);
+        return new TablePresenterImpl(dataSource);
     }
 
     @Provides
@@ -62,8 +62,8 @@ public class PresentersModule {
      * @return
      */
     @Provides
-    public ReservationsPresenter provideReservationsPresenter(ReservationsDataSource dataSource) {
+    public ReservationsPresenterImpl provideReservationsPresenter(ReservationsDataSource dataSource) {
 
-        return new ReservationsPresenter(dataSource);
+        return new ReservationsPresenterImpl(dataSource);
     }
 }

@@ -4,16 +4,30 @@ package com.eexposito.restaurant.presenter;
 import android.support.annotation.NonNull;
 
 import com.eexposito.restaurant.datasources.CustomerDataSource;
-import com.eexposito.restaurant.presenter.callbacks.ProgressViewCallback;
+import com.eexposito.restaurant.presenter.contracts.CustomerListContract;
 import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
 
-public class CustomerPresenter extends BasePresenter<ProgressViewCallback> {
+import java.lang.ref.WeakReference;
 
+import io.realm.Realm;
+
+public class CustomerPresenterImpl implements CustomerListContract.CustomerPresenter {
+
+    private Realm mRealm;
+    WeakReference<CustomerListContract.View> mViewWeakReference;
     private CustomerDataSource mCustomerDataSource;
 
-    public CustomerPresenter(@NonNull CustomerDataSource customerDataSource) {
+    public CustomerPresenterImpl(@NonNull CustomerDataSource customerDataSource) {
 
         mCustomerDataSource = customerDataSource;
+    }
+
+    @Override
+    public void bind(final CustomerListContract.View view) {
+
+        mRealm = Realm.getDefaultInstance();
+        mViewWeakReference = new WeakReference<>(view);
+        loadDataOnBind();
     }
 
     @Override
@@ -42,5 +56,23 @@ public class CustomerPresenter extends BasePresenter<ProgressViewCallback> {
                             mViewWeakReference.get().onFetchDataCompleted();
                         }
                 );
+    }
+
+    @Override
+    public boolean isViewBound() {
+
+        return mViewWeakReference != null && mViewWeakReference.get() != null;
+    }
+
+    @Override
+    public void unBind() {
+
+        mViewWeakReference = null;
+    }
+
+    @Override
+    public void clear() {
+
+        mRealm.close();
     }
 }

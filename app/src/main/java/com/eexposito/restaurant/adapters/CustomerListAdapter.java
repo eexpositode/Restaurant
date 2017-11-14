@@ -1,6 +1,5 @@
 package com.eexposito.restaurant.adapters;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +44,8 @@ public class CustomerListAdapter extends RealmBaseAdapter<Customer> implements L
 
     private void setCustomerName(final CustomerViewHolder viewHolder, final Customer customer) {
 
-        String formattedName = viewHolder.mNameTextView.getContext().getString(R.string.customer_formatted_name, String.valueOf(customer.getOrder() + 1), customer.getLastName(), customer.getFirstName());
+        String formattedName =
+                viewHolder.mNameTextView.getContext().getString(R.string.customer_formatted_name, String.valueOf(customer.getOrder() + 1), customer.getLastName(), customer.getFirstName());
         viewHolder.mNameTextView.setText(formattedName);
     }
 
