@@ -33,7 +33,7 @@ public class MainApplication extends Application implements HasActivityInjector 
         super.onCreate();
 
         getApplicationComponent();
-        initializeRealm();
+        initRealm();
 
     }
 
@@ -47,7 +47,7 @@ public class MainApplication extends Application implements HasActivityInjector 
         return applicationComponent;
     }
 
-    protected void initializeRealm() {
+    protected void initRealm() {
         // securityKey
         char[] chars = "16CharacterLongPasswordKey4Realm".toCharArray();
         byte[] key = new byte[chars.length * 2];
