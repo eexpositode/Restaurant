@@ -8,22 +8,21 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
 
 import com.eexposito.restaurant.R;
-import com.eexposito.restaurant.presenter.CustomerPresenterImpl;
-import com.eexposito.restaurant.presenter.ReservationsPresenterImpl;
+import com.eexposito.restaurant.presenter.contracts.CustomerListContract;
 import com.eexposito.restaurant.presenter.contracts.ReservationsContract;
 import com.eexposito.restaurant.realm.models.Customer;
 import com.eexposito.restaurant.realm.models.Table;
 import com.eexposito.restaurant.views.CreateReservationView;
+import com.eexposito.restaurant.views.CustomDialog;
 import com.eexposito.restaurant.views.CustomerListView;
-import com.eexposito.restaurant.views.ToolbarView;
 import com.eexposito.restaurant.visitors.PrintModelVisitor;
 
 import javax.inject.Inject;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
@@ -34,7 +33,6 @@ import dagger.android.AndroidInjection;
 public class ReservationsActivity extends AppCompatActivity implements
         ReservationsContract.View,
         CustomerListView.OnCustomerActionCallback,
-        ToolbarView.OnToolbarActionCallback,
         CreateReservationView.OnCreateReservationActionCallback {
 
     public static final String RESERVATIONS_TABLE_ID = "SELECTED_TABLE";
@@ -43,22 +41,13 @@ public class ReservationsActivity extends AppCompatActivity implements
     public static final String RESERVATIONS_ERR_MSG = "ERROR_MSG";
 
     @Inject
-    ReservationsPresenterImpl mReservationsPresenterImpl;
+    ReservationsContract.ReservationsPresenter mReservationsPresenter;
 
     @Inject
-    CustomerPresenterImpl mCustomerPresenterImpl;
+    CustomerListContract.CustomerPresenter mCustomerPresenter;
 
     @ViewById(R.id.reservations_dialog_view)
     View mDialogView;
-
-    @ViewById(R.id.reservations_toolbar_header)
-    ToolbarView mToolbarView;
-
-    @ViewById(R.id.toolbar_cancel)
-    View mCancel;
-
-    @ViewById(R.id.toolbar_accept)
-    View mAccept;
 
     @ViewById(R.id.reservations_customer_list)
     CustomerListView mCustomerListView;
@@ -83,15 +72,12 @@ public class ReservationsActivity extends AppCompatActivity implements
             return;
         }
 
-        mReservationsPresenterImpl.bind(this);
-        mReservationsPresenterImpl.getTableFromID(selectedTableID);
+        mReservationsPresenter.bind(this);
+        mReservationsPresenter.getTableFromID(selectedTableID);
     }
 
     @AfterViews
     public void init() {
-
-        // Set up toolbar
-        mToolbarView.bind(this);
 
         showCreateReservationView();
     }
@@ -99,14 +85,14 @@ public class ReservationsActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
 
-        mReservationsPresenterImpl.unBind();
+        mReservationsPresenter.unBind();
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
 
-        mReservationsPresenterImpl.clear();
+        mReservationsPresenter.clear();
         super.onDestroy();
     }
 
@@ -120,8 +106,8 @@ public class ReservationsActivity extends AppCompatActivity implements
     // TODO: 12/11/17 any animation here
     private void showCustomerList() {
 
-        if (!mCustomerPresenterImpl.isViewBound()) {
-            mCustomerPresenterImpl.bind(mCustomerListView);
+        if (!mCustomerPresenter.isViewBound()) {
+            mCustomerPresenter.bind(mCustomerListView);
         }
         mCustomerListView.bind(this);
         mCustomerListView.setVisibility(View.VISIBLE);
@@ -138,7 +124,9 @@ public class ReservationsActivity extends AppCompatActivity implements
 
     private void showError(@NonNull final String error) {
 
-        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+        CustomDialog.showAlertDialog(this,
+                error,
+                (dialog, which) -> dialog.dismiss());
     }
     /////////////////////////////////////////////////////////////////////////////////
     // Reservations presenter view
@@ -191,7 +179,7 @@ public class ReservationsActivity extends AppCompatActivity implements
     @Override
     public void onCustomerClick(final String customerID) {
 
-        mReservationsPresenterImpl.getCustomerByID(customerID);
+        mReservationsPresenter.getCustomerByID(customerID);
 
         showCreateReservationView();
     }
@@ -199,14 +187,14 @@ public class ReservationsActivity extends AppCompatActivity implements
     @Override
     public void onCustomerViewDetachedFromWindow() {
 
-        mCustomerPresenterImpl.unBind();
-        mCustomerPresenterImpl.clear();
+        mCustomerPresenter.unBind();
+        mCustomerPresenter.clear();
     }
 
     /////////////////////////////////////////////////////////////////////////////////
     // Toolbar
     /////////////////////////////////////////////////////////////////////////////////
-    @Override
+    @Click(R.id.toolbar_accept)
     public void onAcceptClicked() {
 
         if (mSelectedCustomer == null) {
@@ -226,7 +214,8 @@ public class ReservationsActivity extends AppCompatActivity implements
         finish();
     }
 
-    @Override
+
+    @Click(R.id.toolbar_cancel)
     public void onCancelClicked() {
 
         Intent returnIntent = new Intent();

@@ -42,18 +42,18 @@ public class TableDataSource {
         return Observable.just(mModelManager.getAllModels(realm, Table.class));
     }
 
+    // TODO: 15/11/17 Make this observable happen in the io thread
     private Observable<RealmResults<Table>> getTablesFromRetrofit(@NonNull final Realm realm) {
 
         // TODO: 13/11/17 Put some internet checking stuff
         return mReservationsApi.getTableAvailability()
-                .subscribeOn(RxSchedulerConfiguration.getIOThread())
-                .observeOn(RxSchedulerConfiguration.getComputationThread())
+//                .subscribeOn(RxSchedulerConfiguration.getIOThread())
+//                .observeOn(RxSchedulerConfiguration.getComputationThread())
                 .map(responses -> {
                             saveTables(responses);
                             return responses;
                         }
                 )
-                .observeOn(RxSchedulerConfiguration.getMainThread())
                 .map(responses -> mModelManager.getAllModels(realm, Table.class));
     }
 

@@ -17,7 +17,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ApplicationModule {
 
-    private static final String BASE_URL = "http://demo3083143.mockable.io/";
+    private static final String BASE_URL = "https://s3-eu-west-1.amazonaws.com/quandoo-assessment/";
+//    private static final String BASE_URL = "http://demo3083143.mockable.io/";
 
     @Provides
     Realm provideRealm() {

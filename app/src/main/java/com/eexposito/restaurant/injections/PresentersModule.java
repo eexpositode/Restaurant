@@ -8,6 +8,9 @@ import com.eexposito.restaurant.datasources.TableDataSource;
 import com.eexposito.restaurant.presenter.CustomerPresenterImpl;
 import com.eexposito.restaurant.presenter.ReservationsPresenterImpl;
 import com.eexposito.restaurant.presenter.TablePresenterImpl;
+import com.eexposito.restaurant.presenter.contracts.CustomerListContract;
+import com.eexposito.restaurant.presenter.contracts.ReservationsContract;
+import com.eexposito.restaurant.presenter.contracts.TableListContract;
 import com.eexposito.restaurant.realm.ModelManager;
 import com.eexposito.restaurant.retrofit.ReservationsServiceApi;
 
@@ -31,7 +34,7 @@ public class PresentersModule {
      * @return
      */
     @Provides
-    public CustomerPresenterImpl provideCustomerPresenter(CustomerDataSource dataSource) {
+    public CustomerListContract.CustomerPresenter provideCustomerPresenter(CustomerDataSource dataSource) {
 
         return new CustomerPresenterImpl(dataSource);
     }
@@ -44,7 +47,7 @@ public class PresentersModule {
     }
 
     @Provides
-    public TablePresenterImpl provideTablePresenter(TableDataSource dataSource) {
+    public TableListContract.TablePresenter provideTablePresenter(TableDataSource dataSource) {
 
         return new TablePresenterImpl(dataSource);
     }
@@ -62,7 +65,7 @@ public class PresentersModule {
      * @return
      */
     @Provides
-    public ReservationsPresenterImpl provideReservationsPresenter(ReservationsDataSource dataSource) {
+    public ReservationsContract.ReservationsPresenter provideReservationsPresenter(ReservationsDataSource dataSource) {
 
         return new ReservationsPresenterImpl(dataSource);
     }
