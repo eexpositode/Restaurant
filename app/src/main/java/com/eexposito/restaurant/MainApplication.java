@@ -61,6 +61,7 @@ public class MainApplication extends Application implements HasActivityInjector 
         Realm.setDefaultConfiguration(RealmDefinitions.mConfiguration);
     }
 
+
     @Override
     public DispatchingAndroidInjector<Activity> activityInjector() {
 
