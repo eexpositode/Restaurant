@@ -60,7 +60,7 @@ public class RestaurantActivity extends AppCompatActivity implements TableGridVi
                 createReservation(data.getStringExtra(ReservationsActivity.RESERVATIONS_TABLE_ID),
                         data.getStringExtra(ReservationsActivity.RESERVATIONS_CUSTOMER_ID),
                         data.getStringExtra(ReservationsActivity.RESERVATIONS_TIME));
-            } else {
+            } else if (data != null){
                 String error = data.getStringExtra(ReservationsActivity.RESERVATIONS_ERR_MSG);
                 if (error != null) {
                     CustomDialog.showAlertDialog(this,

@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.eexposito.restaurant.R;
 import com.eexposito.restaurant.adapters.TableGridAdapter;
@@ -43,13 +42,15 @@ public class TableGridView extends FrameLayout implements TableListContract.View
         super(context, attrs);
     }
 
-    public TableGridView(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyleAttr) {
+    public TableGridView(@NonNull final Context context, @Nullable final AttributeSet attrs,
+                         final int defStyleAttr) {
 
         super(context, attrs, defStyleAttr);
     }
 
     @SuppressWarnings("unused")
-    public TableGridView(@NonNull final Context context, @Nullable final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
+    public TableGridView(@NonNull final Context context, @Nullable final AttributeSet attrs,
+                         final int defStyleAttr, final int defStyleRes) {
 
         super(context, attrs, defStyleAttr, defStyleRes);
     }
@@ -74,21 +75,18 @@ public class TableGridView extends FrameLayout implements TableListContract.View
 
     @Override
     public void onFetchDataStarted() {
-        // Show progress dialog
-        Toast.makeText(getContext(), "Fetch data started", Toast.LENGTH_LONG).show();
+
+        CustomDialog.showProgressDialog(getContext(), getContext().getString(R.string.restaurant_fetching_tables), "");
     }
 
     @Override
     public void onFetchDataCompleted() {
-        // Hide progress dialog
-        Toast.makeText(getContext(), "Fetch data completed", Toast.LENGTH_LONG).show();
+
+        CustomDialog.hideProgressDialog();
     }
 
     @Override
     public void onFetchDataSuccess(final RealmResults<Table> modelList) {
-
-        Toast.makeText(getContext(), "List found with size " + modelList.size(), Toast.LENGTH_LONG).show();
-
 
         if (mTableGridAdapter == null) {
             mTableGridAdapter = new TableGridAdapter(modelList);
@@ -100,7 +98,9 @@ public class TableGridView extends FrameLayout implements TableListContract.View
 
     @Override
     public void onFetchDataError(final Throwable e) {
-        // Show error dialog
-        Toast.makeText(getContext(), "Fetch data error: " + e, Toast.LENGTH_LONG).show();
+
+        CustomDialog.showAlertDialog(getContext(),
+                getContext().getString(R.string.fetch_data_err, e.getMessage()),
+                (dialog, which) -> dialog.dismiss());
     }
 }

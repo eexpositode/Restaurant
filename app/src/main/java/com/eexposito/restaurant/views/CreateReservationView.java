@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.eexposito.restaurant.R;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EViewGroup;
@@ -101,7 +102,7 @@ public class CreateReservationView extends FrameLayout {
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                 (view, hourOfDay, minute1) -> {
                     if (mCallback != null) {
-                        String reservationTime = String.format("%s : %s", hourOfDay, minute1);
+                        String reservationTime = String.format(Locale.getDefault(),"%02d : %02d", hourOfDay, minute1);
                         mCallback.onTimePicked(reservationTime);
                     }
                 }, hour, minute, false);

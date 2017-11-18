@@ -90,11 +90,13 @@ public class CustomerListView extends FrameLayout implements CustomerListContrac
     @Override
     public void onFetchDataStarted() {
 
+        CustomDialog.showProgressDialog(getContext(), getContext().getString(R.string.reservations_fetch_customers), "");
     }
 
     @Override
     public void onFetchDataCompleted() {
 
+        CustomDialog.hideProgressDialog();
     }
 
     @Override
@@ -111,5 +113,8 @@ public class CustomerListView extends FrameLayout implements CustomerListContrac
     @Override
     public void onFetchDataError(final Throwable e) {
 
+        CustomDialog.showAlertDialog(getContext(),
+                getContext().getString(R.string.fetch_data_err, e.getMessage()),
+                (dialog, which) -> dialog.dismiss());
     }
 }

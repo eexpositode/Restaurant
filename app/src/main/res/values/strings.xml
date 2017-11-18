@@ -10,6 +10,10 @@
 
     <string name="reservations_no_table_selected">No table was selected or wrong table id was found.</string>
     <string name="reservations_select_time_err">Please, select a timer for the reservation</string>
+    <string name="reservations_fetch_customers">Fetch customer data</string>
 
     <string name="restaurant_remove_reservation">You are going to remove this reservation. Are you sure?</string>
+    <string name="restaurant_fetching_tables">Fetching tables</string>
+
+    <string name="fetch_data_err">Fetch data error: %s</string>
 </resources>
