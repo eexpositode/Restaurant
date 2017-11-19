@@ -9,11 +9,8 @@ import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
 
 import java.lang.ref.WeakReference;
 
-import io.realm.Realm;
-
 public class TablePresenterImpl implements TableListContract.TablePresenter {
 
-    private Realm mRealm;
     private WeakReference<TableListContract.View> mViewWeakReference;
     private TableDataService mTableDataService;
 
@@ -25,7 +22,6 @@ public class TablePresenterImpl implements TableListContract.TablePresenter {
     @Override
     public void bind(final TableListContract.View view) {
 
-        mRealm = Realm.getDefaultInstance();
         mViewWeakReference = new WeakReference<>(view);
         loadDataOnBind();
     }
@@ -35,7 +31,7 @@ public class TablePresenterImpl implements TableListContract.TablePresenter {
 
         mViewWeakReference.get().onFetchDataStarted();
 
-        mTableDataService.getTablesFromRealm(mRealm)
+        mTableDataService.getTablesFromRealm()
                 .subscribe(tables -> mViewWeakReference.get().onFetchDataSuccess(tables),
                         error -> mViewWeakReference.get().onFetchDataError(error));
 
@@ -44,7 +40,7 @@ public class TablePresenterImpl implements TableListContract.TablePresenter {
 
     private void loadData() {
 
-        mTableDataService.getTables(mRealm)
+        mTableDataService.getTables()
                 .subscribeOn(RxSchedulerConfiguration.getComputationThread())
                 .observeOn(RxSchedulerConfiguration.getMainThread())
                 .subscribe(tables -> {
@@ -73,6 +69,6 @@ public class TablePresenterImpl implements TableListContract.TablePresenter {
     @Override
     public void clear() {
 
-        mRealm.close();
+        mTableDataService.closeRealm();
     }
 }

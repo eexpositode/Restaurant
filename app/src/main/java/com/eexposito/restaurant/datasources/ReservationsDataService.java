@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.eexposito.restaurant.MainApplication;
 import com.eexposito.restaurant.realm.ModelManager;
+import com.eexposito.restaurant.realm.RealmFactory;
 import com.eexposito.restaurant.realm.exceptions.BusinessError;
 import com.eexposito.restaurant.realm.exceptions.BusinessException;
 import com.eexposito.restaurant.realm.models.Customer;
@@ -13,12 +14,16 @@ import com.eexposito.restaurant.realm.models.Table;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
-import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
-public class ReservationsDataService {
+public class ReservationsDataService implements RealmDataService {
+
+    @Inject
+    RealmFactory mRealmFactory;
 
     @NonNull
     ModelManager mModelManager;
@@ -35,14 +40,14 @@ public class ReservationsDataService {
         return Observable.empty();
     }
 
-    public Observable<RealmResults<Table>> getTableByID(final Realm realm, final String id) {
+    public Observable<RealmResults<Table>> getTableByID(final String id) {
 
-        return Observable.just(mModelManager.getModelByID(realm, Table.class, id));
+        return Observable.just(mModelManager.getModelByID(mRealmFactory.getRealm(), Table.class, id));
     }
 
-    public Observable<RealmResults<Customer>> getCustomerByID(final Realm realm, final String id) {
+    public Observable<RealmResults<Customer>> getCustomerByID(final String id) {
 
-        return Observable.just(mModelManager.getModelByID(realm, Customer.class, id));
+        return Observable.just(mModelManager.getModelByID(mRealmFactory.getRealm(), Customer.class, id));
     }
 
     public <M extends RealmObject> M checkValidSingleData(final RealmResults<M> models)
@@ -70,5 +75,11 @@ public class ReservationsDataService {
     public void removeReservation(final Table table) {
 
         mModelManager.removeReservation(table);
+    }
+
+    @Override
+    public void closeRealm() {
+
+        mRealmFactory.closeRealm();
     }
 }

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.eexposito.restaurant.MainApplication;
 import com.eexposito.restaurant.realm.ModelManager;
+import com.eexposito.restaurant.realm.RealmFactory;
 import com.eexposito.restaurant.realm.models.Table;
 import com.eexposito.restaurant.retrofit.ReservationsServiceApi;
 import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
@@ -13,11 +14,16 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class TableDataService {
+public class TableDataService implements RealmDataService {
+
+    @Inject
+    RealmFactory mRealmFactory;
 
     @NonNull
     ModelManager mModelManager;
@@ -34,19 +40,19 @@ public class TableDataService {
         mReservationsApi = reservationApi;
     }
 
-    public Observable<RealmResults<Table>> getTables(@NonNull final Realm realm) {
+    public Observable<RealmResults<Table>> getTables() {
 
-        return Observable.concat(getTablesFromRealm(realm),
-                getTablesFromRetrofit(realm));
+        return Observable.concat(getTablesFromRealm(),
+                getTablesFromRetrofit());
     }
 
-    public Observable<RealmResults<Table>> getTablesFromRealm(@NonNull final Realm realm) {
+    public Observable<RealmResults<Table>> getTablesFromRealm() {
 
-        return Observable.just(mModelManager.getAllModels(realm, Table.class));
+        return Observable.just(mModelManager.getAllModels(mRealmFactory.getRealm(), Table.class));
     }
 
     // TODO: 15/11/17 Make this observable happen in the io thread
-    private Observable<RealmResults<Table>> getTablesFromRetrofit(@NonNull final Realm realm) {
+    private Observable<RealmResults<Table>> getTablesFromRetrofit() {
 
         // TODO: 13/11/17 Put some internet checking stuff
         return mReservationsApi.getTableAvailability()
@@ -59,7 +65,7 @@ public class TableDataService {
                 )
                 // Realm instance lives in the main thread
                 .observeOn(RxSchedulerConfiguration.getMainThread())
-                .map(responses -> mModelManager.getAllModels(realm, Table.class));
+                .map(responses -> mModelManager.getAllModels(mRealmFactory.getRealm(), Table.class));
     }
 
     private void saveTables(final List<Boolean> responses) {
@@ -83,5 +89,11 @@ public class TableDataService {
                 .collect(Collectors.toList());
 
         mModelManager.saveModels(tables);
+    }
+
+    @Override
+    public void closeRealm() {
+
+        mRealmFactory.closeRealm();
     }
 }

@@ -11,34 +11,30 @@ import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
 
 import java.lang.ref.WeakReference;
 
-import io.realm.Realm;
-
 public class ReservationsPresenterImpl implements ReservationsContract.ReservationsPresenter {
 
-    private Realm mRealm;
     private WeakReference<ReservationsContract.View> mViewWeakReference;
-    private ReservationsDataService mDataSource;
+    private ReservationsDataService mReservationsDataService;
 
     public ReservationsPresenterImpl(@NonNull final ReservationsDataService dataSource) {
 
-        mDataSource = dataSource;
+        mReservationsDataService = dataSource;
     }
 
     @Override
     public void bind(final ReservationsContract.View view) {
 
-        mRealm = Realm.getDefaultInstance();
         mViewWeakReference = new WeakReference<>(view);
     }
 
     @Override
     public void getTableFromID(@NonNull final String id) {
 
-        mDataSource.getTableByID(mRealm, id)
+        mReservationsDataService.getTableByID(id)
                 .subscribeOn(RxSchedulerConfiguration.getComputationThread())
                 .observeOn(RxSchedulerConfiguration.getMainThread())
                 .subscribe(tables -> {
-                            Table found = mDataSource.checkValidSingleData(tables);
+                            Table found = mReservationsDataService.checkValidSingleData(tables);
                             if (found != null) {
                                 mViewWeakReference.get().onFetchTableByID(found);
                             }
@@ -49,11 +45,11 @@ public class ReservationsPresenterImpl implements ReservationsContract.Reservati
     @Override
     public void getCustomerByID(@NonNull final String id) {
 
-        mDataSource.getCustomerByID(mRealm, id)
+        mReservationsDataService.getCustomerByID(id)
                 .subscribeOn(RxSchedulerConfiguration.getComputationThread())
                 .observeOn(RxSchedulerConfiguration.getMainThread())
                 .subscribe(customers -> {
-                            Customer found = mDataSource.checkValidSingleData(customers);
+                            Customer found = mReservationsDataService.checkValidSingleData(customers);
                             if (found != null) {
                                 mViewWeakReference.get().onFetchCustomerByID(found);
                             }
@@ -64,13 +60,13 @@ public class ReservationsPresenterImpl implements ReservationsContract.Reservati
     @Override
     public void createReservation(@NonNull final String tableID, @NonNull final String customerID, @NonNull final String time) {
 
-        mDataSource.createReservation(tableID, customerID, time);
+        mReservationsDataService.createReservation(tableID, customerID, time);
     }
 
     @Override
     public void removeReservation(@NonNull final Table table) {
 
-        mDataSource.removeReservation(table);
+        mReservationsDataService.removeReservation(table);
     }
 
     @Override
@@ -88,6 +84,6 @@ public class ReservationsPresenterImpl implements ReservationsContract.Reservati
     @Override
     public void clear() {
 
-        mRealm.close();
+        mReservationsDataService.closeRealm();
     }
 }

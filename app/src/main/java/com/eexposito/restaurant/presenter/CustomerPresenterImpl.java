@@ -12,11 +12,11 @@ import java.lang.ref.WeakReference;
 public class CustomerPresenterImpl implements CustomerListContract.CustomerPresenter {
 
     WeakReference<CustomerListContract.View> mViewWeakReference;
-    private CustomerDataService mCustomerDataSource;
+    private CustomerDataService mCustomerDataService;
 
     public CustomerPresenterImpl(@NonNull CustomerDataService customerDataSource) {
 
-        mCustomerDataSource = customerDataSource;
+        mCustomerDataService = customerDataSource;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class CustomerPresenterImpl implements CustomerListContract.CustomerPrese
 
         mViewWeakReference.get().onFetchDataStarted();
 
-        mCustomerDataSource.getCustomersFromRealm()
+        mCustomerDataService.getCustomersFromRealm()
                 .subscribe(customers -> mViewWeakReference.get().onFetchDataSuccess(customers),
                         error -> mViewWeakReference.get().onFetchDataError(error));
 
@@ -40,7 +40,7 @@ public class CustomerPresenterImpl implements CustomerListContract.CustomerPrese
 
     private void loadData() {
 
-        mCustomerDataSource.getCustomers()
+        mCustomerDataService.getCustomers()
                 .subscribeOn(RxSchedulerConfiguration.getComputationThread())
                 .observeOn(RxSchedulerConfiguration.getMainThread())
                 .subscribe(customers -> {
@@ -69,6 +69,6 @@ public class CustomerPresenterImpl implements CustomerListContract.CustomerPrese
     @Override
     public void clear() {
 
-        mCustomerDataSource.closeRealm();
+        mCustomerDataService.closeRealm();
     }
 }
