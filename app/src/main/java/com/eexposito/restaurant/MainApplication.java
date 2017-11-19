@@ -5,12 +5,13 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.eexposito.restaurant.injections.ApplicationComponent;
+import com.eexposito.restaurant.injections.ApplicationModule;
 import com.eexposito.restaurant.injections.DaggerApplicationComponent;
 import com.eexposito.restaurant.realm.RealmDefinitions;
 
-import javax.inject.Inject;
-
 import org.androidannotations.annotations.EApplication;
+
+import javax.inject.Inject;
 
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
@@ -37,11 +38,11 @@ public class MainApplication extends Application implements HasActivityInjector 
 
     }
 
-    protected ApplicationComponent getApplicationComponent() {
+    public ApplicationComponent getApplicationComponent() {
 
         ApplicationComponent applicationComponent = DaggerApplicationComponent
                 .builder()
-                .application(this)
+                .applicationModule(new ApplicationModule(this))
                 .build();
         applicationComponent.inject(this);
         return applicationComponent;

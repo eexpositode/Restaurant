@@ -3,7 +3,7 @@ package com.eexposito.restaurant.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.eexposito.restaurant.datasources.ReservationsDataSource;
+import com.eexposito.restaurant.datasources.ReservationsDataService;
 import com.eexposito.restaurant.presenter.contracts.ReservationsContract;
 import com.eexposito.restaurant.realm.models.Customer;
 import com.eexposito.restaurant.realm.models.Table;
@@ -17,9 +17,9 @@ public class ReservationsPresenterImpl implements ReservationsContract.Reservati
 
     private Realm mRealm;
     private WeakReference<ReservationsContract.View> mViewWeakReference;
-    private ReservationsDataSource mDataSource;
+    private ReservationsDataService mDataSource;
 
-    public ReservationsPresenterImpl(@NonNull final ReservationsDataSource dataSource) {
+    public ReservationsPresenterImpl(@NonNull final ReservationsDataService dataSource) {
 
         mDataSource = dataSource;
     }

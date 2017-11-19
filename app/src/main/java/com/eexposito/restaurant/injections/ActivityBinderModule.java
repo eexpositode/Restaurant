@@ -8,7 +8,7 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 @Module
-public abstract class ActivityModule {
+public abstract class ActivityBinderModule {
 
     @ContributesAndroidInjector
     abstract RestaurantActivity_ bindRestaurantActivity();

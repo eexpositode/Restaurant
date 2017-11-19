@@ -5,7 +5,7 @@ import com.eexposito.restaurant._support.BaseTest;
 public class CustomerPresenterImplTest extends BaseTest {
     //
     //    @Mock
-    //    private CustomerDataSource mDataSource;
+    //    private CustomerDataService mDataSource;
     //
     //    @Mock
     //    CustomerListContract.View mView;
@@ -34,7 +34,7 @@ public class CustomerPresenterImplTest extends BaseTest {
     //    @Test
     //    public void testBind_RealmSuccess() throws Exception {
     //
-    //        // Mocking returned values from the RealmService
+    //        // Mocking returned values from the RealmFactory
     //        Observable<RealmResults<RealmObject>> observable = Observable.just(mockRealmResults(4));
     //        when(mDataSource.getCustomersFromRealm(any()))
     //                .thenReturn(observable);
@@ -57,7 +57,7 @@ public class CustomerPresenterImplTest extends BaseTest {
     //    @Test
     //    public void testBind_RealmError() throws Exception {
     //
-    //        // Mocking returned values from the RealmService
+    //        // Mocking returned values from the RealmFactory
     //        RuntimeException realmError = new RuntimeException();
     //        when(mService.getAllModelsAsync(any()))
     //                .thenReturn(Observable.error(realmError));
@@ -81,7 +81,7 @@ public class CustomerPresenterImplTest extends BaseTest {
     //    @Test
     //    public void testBind_DataError() throws Exception {
     //
-    //        // Mocking returned values from the RealmService
+    //        // Mocking returned values from the RealmFactory
     //        RuntimeException realmError = new RuntimeException();
     //        when(mService.getAllModelsAsync(any()))
     //                .thenReturn(Observable.error(realmError));

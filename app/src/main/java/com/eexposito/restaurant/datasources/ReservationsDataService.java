@@ -3,6 +3,7 @@ package com.eexposito.restaurant.datasources;
 
 import android.support.annotation.NonNull;
 
+import com.eexposito.restaurant.MainApplication;
 import com.eexposito.restaurant.realm.ModelManager;
 import com.eexposito.restaurant.realm.exceptions.BusinessError;
 import com.eexposito.restaurant.realm.exceptions.BusinessException;
@@ -17,13 +18,15 @@ import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 
-public class ReservationsDataSource {
+public class ReservationsDataService {
 
     @NonNull
     ModelManager mModelManager;
 
-    public ReservationsDataSource(@NonNull final ModelManager modelManager) {
+    public ReservationsDataService(@NonNull MainApplication application,
+                                   @NonNull final ModelManager modelManager) {
 
+        application.getApplicationComponent().inject(this);
         mModelManager = modelManager;
     }
 
@@ -58,7 +61,8 @@ public class ReservationsDataSource {
         return found;
     }
 
-    public void createReservation(@NonNull final String tableID, @NonNull final String customerID, @NonNull final String time) {
+    public void createReservation(@NonNull final String tableID, @NonNull final String
+            customerID, @NonNull final String time) {
 
         mModelManager.createReservation(tableID, customerID, time);
     }

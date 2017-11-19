@@ -3,7 +3,7 @@ package com.eexposito.restaurant.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.eexposito.restaurant.datasources.TableDataSource;
+import com.eexposito.restaurant.datasources.TableDataService;
 import com.eexposito.restaurant.presenter.contracts.TableListContract;
 import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
 
@@ -15,11 +15,11 @@ public class TablePresenterImpl implements TableListContract.TablePresenter {
 
     private Realm mRealm;
     private WeakReference<TableListContract.View> mViewWeakReference;
-    private TableDataSource mTableDataSource;
+    private TableDataService mTableDataService;
 
-    public TablePresenterImpl(@NonNull TableDataSource tableDataSource) {
+    public TablePresenterImpl(@NonNull TableDataService tableDataService) {
 
-        mTableDataSource = tableDataSource;
+        mTableDataService = tableDataService;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class TablePresenterImpl implements TableListContract.TablePresenter {
 
         mViewWeakReference.get().onFetchDataStarted();
 
-        mTableDataSource.getTablesFromRealm(mRealm)
+        mTableDataService.getTablesFromRealm(mRealm)
                 .subscribe(tables -> mViewWeakReference.get().onFetchDataSuccess(tables),
                         error -> mViewWeakReference.get().onFetchDataError(error));
 
@@ -44,7 +44,7 @@ public class TablePresenterImpl implements TableListContract.TablePresenter {
 
     private void loadData() {
 
-        mTableDataSource.getTables(mRealm)
+        mTableDataService.getTables(mRealm)
                 .subscribeOn(RxSchedulerConfiguration.getComputationThread())
                 .observeOn(RxSchedulerConfiguration.getMainThread())
                 .subscribe(tables -> {

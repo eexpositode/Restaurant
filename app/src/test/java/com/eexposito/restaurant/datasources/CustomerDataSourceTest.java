@@ -12,7 +12,7 @@ public class CustomerDataSourceTest extends BaseTest {
     //    private ReservationsServiceApi mApi;
     //
     //    @InjectMocks
-    //    CustomerDataSource mDataSource;
+    //    CustomerDataService mDataSource;
     //
     //    private List<Customer> mTestCustomers;
     //

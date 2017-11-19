@@ -3,21 +3,18 @@ package com.eexposito.restaurant.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.eexposito.restaurant.datasources.CustomerDataSource;
+import com.eexposito.restaurant.datasources.CustomerDataService;
 import com.eexposito.restaurant.presenter.contracts.CustomerListContract;
 import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
 
 import java.lang.ref.WeakReference;
 
-import io.realm.Realm;
-
 public class CustomerPresenterImpl implements CustomerListContract.CustomerPresenter {
 
-    private Realm mRealm;
     WeakReference<CustomerListContract.View> mViewWeakReference;
-    private CustomerDataSource mCustomerDataSource;
+    private CustomerDataService mCustomerDataSource;
 
-    public CustomerPresenterImpl(@NonNull CustomerDataSource customerDataSource) {
+    public CustomerPresenterImpl(@NonNull CustomerDataService customerDataSource) {
 
         mCustomerDataSource = customerDataSource;
     }
@@ -25,7 +22,6 @@ public class CustomerPresenterImpl implements CustomerListContract.CustomerPrese
     @Override
     public void bind(final CustomerListContract.View view) {
 
-        mRealm = Realm.getDefaultInstance();
         mViewWeakReference = new WeakReference<>(view);
         loadDataOnBind();
     }
@@ -35,7 +31,7 @@ public class CustomerPresenterImpl implements CustomerListContract.CustomerPrese
 
         mViewWeakReference.get().onFetchDataStarted();
 
-        mCustomerDataSource.getCustomersFromRealm(mRealm)
+        mCustomerDataSource.getCustomersFromRealm()
                 .subscribe(customers -> mViewWeakReference.get().onFetchDataSuccess(customers),
                         error -> mViewWeakReference.get().onFetchDataError(error));
 
@@ -44,7 +40,7 @@ public class CustomerPresenterImpl implements CustomerListContract.CustomerPrese
 
     private void loadData() {
 
-        mCustomerDataSource.getCustomers(mRealm)
+        mCustomerDataSource.getCustomers()
                 .subscribeOn(RxSchedulerConfiguration.getComputationThread())
                 .observeOn(RxSchedulerConfiguration.getMainThread())
                 .subscribe(customers -> {
@@ -73,6 +69,6 @@ public class CustomerPresenterImpl implements CustomerListContract.CustomerPrese
     @Override
     public void clear() {
 
-        mRealm.close();
+        mCustomerDataSource.closeRealm();
     }
 }

@@ -3,6 +3,7 @@ package com.eexposito.restaurant.datasources;
 
 import android.support.annotation.NonNull;
 
+import com.eexposito.restaurant.MainApplication;
 import com.eexposito.restaurant.realm.ModelManager;
 import com.eexposito.restaurant.realm.models.Table;
 import com.eexposito.restaurant.retrofit.ReservationsServiceApi;
@@ -16,7 +17,7 @@ import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class TableDataSource {
+public class TableDataService {
 
     @NonNull
     ModelManager mModelManager;
@@ -24,9 +25,11 @@ public class TableDataSource {
     @NonNull
     ReservationsServiceApi mReservationsApi;
 
-    public TableDataSource(@NonNull final ModelManager modelManager,
-                           @NonNull final ReservationsServiceApi reservationApi) {
+    public TableDataService(@NonNull MainApplication application,
+                            @NonNull final ModelManager modelManager,
+                            @NonNull final ReservationsServiceApi reservationApi) {
 
+        application.getApplicationComponent().inject(this);
         mModelManager = modelManager;
         mReservationsApi = reservationApi;
     }
@@ -54,6 +57,8 @@ public class TableDataSource {
                             return responses;
                         }
                 )
+                // Realm instance lives in the main thread
+                .observeOn(RxSchedulerConfiguration.getMainThread())
                 .map(responses -> mModelManager.getAllModels(realm, Table.class));
     }
 
@@ -64,7 +69,8 @@ public class TableDataSource {
         }
 
         Realm realm = Realm.getDefaultInstance();
-        List<Table> currentTables = realm.copyFromRealm(mModelManager.getAllModels(realm, Table.class));
+        List<Table> currentTables = realm.copyFromRealm(mModelManager.getAllModels(realm, Table
+                .class));
         realm.close();
 
         if (!currentTables.isEmpty()) {

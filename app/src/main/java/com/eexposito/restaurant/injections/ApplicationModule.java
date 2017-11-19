@@ -1,41 +1,47 @@
 package com.eexposito.restaurant.injections;
 
+import com.eexposito.restaurant.MainApplication;
 import com.eexposito.restaurant.realm.ModelManager;
 import com.eexposito.restaurant.retrofit.ReservationsServiceApi;
-import com.eexposito.restaurant.utils.RxSchedulerConfiguration;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import io.realm.Realm;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-@Module
+@Module(includes = {PresentersModule.class, ServiceModule.class})
 public class ApplicationModule {
 
     private static final String BASE_URL = "https://s3-eu-west-1.amazonaws.com/quandoo-assessment/";
 //    private static final String BASE_URL = "http://demo3083143.mockable.io/";
 
-    @Provides
-    Realm provideRealm() {
+    private final MainApplication mApplication;
 
-        return Realm.getDefaultInstance();
+    public ApplicationModule(MainApplication app) {
+
+        mApplication = app;
+    }
+
+    @Provides
+    MainApplication provideApplication() {
+
+        return mApplication;
     }
 
     /**
      * ModelManager
      */
     @Provides
+    @Singleton
     public ModelManager provideModelManager() {
 
         return new ModelManager();
     }
 
-    /* OkHttpclient for retrofit2 */
     @Provides
     @Singleton
     public OkHttpClient provideOkHttpClient() {
@@ -43,10 +49,9 @@ public class ApplicationModule {
         return new OkHttpClient.Builder().build();
     }
 
-    /* retrofit2 */
     @Provides
     @Singleton
-    public ReservationsServiceApi provideReservationsApiInterface(OkHttpClient okHttpClient) {
+    public ReservationsServiceApi provideRetrofit(OkHttpClient okHttpClient) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
