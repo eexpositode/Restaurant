@@ -1,28 +1,37 @@
 package com.eexposito.restaurant._support;
 
 
-import com.eexposito.restaurant.MainApplication;
+import android.app.Application;
+
 import com.eexposito.restaurant._support.injections.components.DaggerTestApplicationComponent;
 import com.eexposito.restaurant._support.injections.components.TestApplicationComponent;
+import com.eexposito.restaurant.realm.RealmDefinitions;
 
-public class TestApplication extends MainApplication {
+import io.realm.Realm;
+
+public class TestApplication extends Application {
 
     @Override
+    public void onCreate() {
+
+        super.onCreate();
+        getApplicationComponent();
+        initRealm();
+    }
+
     protected TestApplicationComponent getApplicationComponent() {
 
         TestApplicationComponent applicationComponent = DaggerTestApplicationComponent
                 .builder()
-                .application(this)
-                //                .testApplicationModule(new TestApplicationModule(this))
-                //                .testContextModule(new TestContextModule(this))
+//                .testApplicationModule(new TestApplicationModule(this))
                 .build();
         applicationComponent.inject(this);
         return applicationComponent;
     }
 
-    @Override
     protected void initRealm() {
 
-        // No Realm is initialized
+        Realm.init(this);
+        Realm.setDefaultConfiguration(RealmDefinitions.mConfiguration);
     }
 }

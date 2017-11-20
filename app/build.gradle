@@ -66,6 +66,12 @@ dependencies {
     testImplementation 'org.robolectric:shadows-support-v4:3.0'
     testAnnotationProcessor 'com.google.dagger:dagger-compiler:' + daggerVersion
 
+    def powerMockitoVersion = '1.6.4'
+    testImplementation 'org.powermock:powermock-module-junit4:' + powerMockitoVersion
+    testImplementation 'org.powermock:powermock-module-junit4-rule:' + powerMockitoVersion
+    testImplementation 'org.powermock:powermock-api-mockito:' + powerMockitoVersion
+    testImplementation 'org.powermock:powermock-classloading-xstream:' + powerMockitoVersion
+
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
